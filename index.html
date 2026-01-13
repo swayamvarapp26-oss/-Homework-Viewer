@@ -3,495 +3,708 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Viewer - Public Access</title>
+    <title>Homework PDF Viewer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <!-- PDF.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <!-- QR Code Generator -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
     <style>
+        :root {
+            --primary-color: #1a73e8;
+            --primary-light: #e8f0fe;
+            --secondary-color: #34a853;
+            --error-color: #ea4335;
+            --warning-color: #fbbc04;
+            --background-color: #f5f7fa;
+            --surface-color: #ffffff;
+            --text-primary: #202124;
+            --text-secondary: #5f6368;
+            --text-light: #9aa0a6;
+            --divider-color: #dadce0;
+            --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Roboto', sans-serif;
         }
 
         body {
-            background-color: #f5f7fa;
-            color: #333;
+            background-color: var(--background-color);
+            color: var(--text-primary);
             line-height: 1.6;
+            min-height: 100vh;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
 
-        header {
-            background: linear-gradient(135deg, #1a73e8 0%, #6c8ef5 100%);
+        /* Header */
+        .app-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #4285f4 100%);
             color: white;
-            padding: 25px 30px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            box-shadow: 0 6px 20px rgba(26, 115, 232, 0.2);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 8px;
-        }
-
-        .subtitle {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        .firebase-path {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 10px 15px;
-            border-radius: 8px;
-            margin-top: 10px;
-            font-family: monospace;
-            font-size: 0.9rem;
-            word-break: break-all;
-        }
-
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 25px;
-        }
-
-        @media (max-width: 1024px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .sidebar {
-            background-color: white;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            height: fit-content;
-        }
-
-        .pdf-list {
-            background-color: white;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-
-        h2 {
-            color: #1a73e8;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #eaeaea;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        h2 i {
-            font-size: 1.4rem;
-        }
-
-        .filter-section {
-            margin-bottom: 25px;
-        }
-
-        .filter-input {
-            width: 100%;
-            padding: 14px 18px;
-            border: 2px solid #e1e5eb;
-            border-radius: 10px;
-            font-size: 1rem;
-            margin-bottom: 15px;
-            transition: border-color 0.3s;
-        }
-
-        .filter-input:focus {
-            outline: none;
-            border-color: #1a73e8;
-        }
-
-        .filter-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .btn {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background-color: #1a73e8;
-            color: white;
-            flex: 1;
-        }
-
-        .btn-primary:hover {
-            background-color: #0d62d9;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background-color: #f1f3f4;
-            color: #5f6368;
-            flex: 1;
-        }
-
-        .btn-secondary:hover {
-            background-color: #e3e5e7;
-        }
-
-        .btn-success {
-            background-color: #34a853;
-            color: white;
-        }
-
-        .btn-success:hover {
-            background-color: #2d9248;
-        }
-
-        .pdf-item {
-            background-color: #f8f9fa;
-            border-left: 4px solid #1a73e8;
-            padding: 18px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .pdf-item:hover {
-            background-color: #e8f0fe;
-            transform: translateX(5px);
+        .app-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .pdf-item.active {
-            background-color: #e3f2fd;
-            border-left-color: #0d62d9;
+        .app-title h1 {
+            font-size: 24px;
+            font-weight: 500;
         }
 
-        .pdf-info h3 {
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-            color: #202124;
+        .app-title i {
+            font-size: 28px;
         }
 
-        .pdf-meta {
+        .header-actions {
             display: flex;
             gap: 15px;
-            color: #5f6368;
-            font-size: 0.85rem;
         }
 
-        .pdf-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .action-btn {
-            background: none;
+        .btn-header {
+            background: rgba(255, 255, 255, 0.2);
             border: none;
-            color: #5f6368;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
             cursor: pointer;
-            padding: 5px;
-            border-radius: 5px;
-            transition: color 0.3s;
-        }
-
-        .action-btn:hover {
-            color: #1a73e8;
-        }
-
-        .viewer-container {
-            background-color: white;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            margin-top: 25px;
-        }
-
-        .pdf-viewer {
-            width: 100%;
-            height: 600px;
-            border: 1px solid #e1e5eb;
-            border-radius: 8px;
-            overflow: auto;
-            background-color: #f8f9fa;
             display: flex;
-            justify-content: center;
             align-items: center;
-            position: relative;
+            gap: 8px;
+            transition: background 0.3s;
+            font-weight: 500;
         }
 
-        .canvas-container {
-            margin: 20px auto;
+        .btn-header:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        /* Homework Card */
+        .homework-card {
+            background: var(--surface-color);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .homework-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .card-content {
+            padding: 24px;
+        }
+
+        .subject-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .subject-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .status-chip {
+            background: var(--secondary-color);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .chapter-name {
+            font-size: 20px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--divider-color);
+            margin: 20px 0;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .detail-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .detail-value {
+            font-size: 16px;
+            color: var(--text-primary);
+            font-weight: 400;
+        }
+
+        .delete-warning {
+            color: var(--warning-color) !important;
+            font-weight: 500;
+        }
+
+        /* Files Section */
+        .files-section {
+            background: var(--surface-color);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 24px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .section-count {
+            background: var(--primary-light);
+            color: var(--primary-color);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Horizontal Scroller */
+        .scroller-container {
+            position: relative;
+            margin: 0 -24px;
+            padding: 0 24px;
+        }
+
+        .files-scroller {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding: 20px 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) var(--divider-color);
+        }
+
+        .files-scroller::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .files-scroller::-webkit-scrollbar-track {
+            background: var(--divider-color);
+            border-radius: 3px;
+        }
+
+        .files-scroller::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 3px;
+        }
+
+        /* File Cards */
+        .file-card {
+            flex: 0 0 auto;
+            width: 200px;
+            background: var(--surface-color);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .file-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .file-card.image-card {
+            width: 180px;
+            height: 240px;
+        }
+
+        .file-card.pdf-card {
+            width: 220px;
+            height: 280px;
+        }
+
+        .image-preview {
+            width: 100%;
+            height: 140px;
+            overflow: hidden;
+            background: var(--background-color);
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .file-card:hover .image-preview img {
+            transform: scale(1.05);
+        }
+
+        .file-info {
+            padding: 16px;
+        }
+
+        .file-name {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .file-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .file-size {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .file-count {
+            background: var(--primary-color);
+            color: white;
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.3s;
+        }
+
+        .btn-open {
+            background: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        .btn-download {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-action:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        /* Countdown Timer */
+        .countdown-card {
+            background: var(--surface-color);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 24px;
             text-align: center;
         }
 
-        .viewer-controls {
+        .countdown-header {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .countdown-timer {
+            background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+            border: 2px solid var(--warning-color);
+            border-radius: 12px;
+            padding: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .countdown-timer i {
+            font-size: 24px;
+            color: var(--warning-color);
+        }
+
+        .countdown-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--warning-color);
+        }
+
+        .countdown-note {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* PDF Viewer Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--surface-color);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            padding: 20px;
+            background: var(--primary-color);
+            color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eaeaea;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-body {
+            flex: 1;
+            overflow: auto;
+            padding: 20px;
+        }
+
+        /* PDF Viewer Controls */
+        .pdf-controls {
+            background: var(--background-color);
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--divider-color);
         }
 
         .page-controls {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 16px;
         }
 
-        .page-nav {
+        .btn-control {
+            background: var(--surface-color);
+            border: 1px solid var(--divider-color);
+            color: var(--text-primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
-        .page-input {
-            width: 60px;
-            padding: 8px;
+        .btn-control:hover {
+            background: var(--primary-light);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .page-info {
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        .viewer-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .pdf-viewer {
+            width: 100%;
+            min-height: 600px;
+            background: var(--background-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: auto;
+        }
+
+        /* Share Modal */
+        .share-modal {
+            background: var(--surface-color);
+            border-radius: 16px;
+            width: 400px;
+            max-width: 90%;
+            padding: 24px;
+        }
+
+        .share-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .share-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 20px;
+            border: 2px solid var(--divider-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .share-option:hover {
+            border-color: var(--primary-color);
+            background: var(--primary-light);
+        }
+
+        .share-icon {
+            font-size: 32px;
+            color: var(--primary-color);
+        }
+
+        .share-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .qr-container {
             text-align: center;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+            background: var(--background-color);
+            border-radius: 12px;
         }
 
+        #qrCodeCanvas {
+            max-width: 200px;
+            margin: 0 auto;
+        }
+
+        .link-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--divider-color);
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .link-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        /* Empty States */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            color: var(--divider-color);
+            margin-bottom: 16px;
+        }
+
+        .empty-text {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .empty-subtext {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .file-card {
+                width: 160px;
+            }
+
+            .share-options {
+                grid-template-columns: 1fr;
+            }
+
+            .pdf-controls {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .page-controls, .viewer-actions {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Loading States */
         .loading {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: #5f6368;
+            padding: 40px;
+            color: var(--text-secondary);
         }
 
-        .loading-spinner {
-            border: 4px solid rgba(26, 115, 232, 0.2);
-            border-top: 4px solid #1a73e8;
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--divider-color);
+            border-top-color: var(--primary-color);
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
             animation: spin 1s linear infinite;
-            margin-bottom: 15px;
+            margin-bottom: 16px;
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            to { transform: rotate(360deg); }
         }
 
-        .empty-state {
-            text-align: center;
-            padding: 50px 20px;
-            color: #5f6368;
-        }
-
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: #dadce0;
-        }
-
-        .firebase-status {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            font-size: 0.9rem;
-        }
-
-        .status-connected {
-            background-color: #e6f4ea;
-            color: #137333;
-        }
-
-        .status-disconnected {
-            background-color: #fce8e6;
-            color: #c5221f;
-        }
-
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-
-        .connected .status-dot {
-            background-color: #137333;
-        }
-
-        .disconnected .status-dot {
-            background-color: #c5221f;
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #eaeaea;
-            color: #5f6368;
-            font-size: 0.9rem;
-        }
-
-        .link-section {
-            background-color: #e8f0fe;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-
-        .link-input-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .link-input {
-            flex: 1;
-            padding: 12px 15px;
-            border: 2px solid #cce0ff;
-            border-radius: 8px;
-            font-family: monospace;
-            font-size: 0.9rem;
-        }
-
-        .link-input:focus {
-            outline: none;
-            border-color: #1a73e8;
-        }
-
-        .copy-btn {
-            background-color: #1a73e8;
-            color: white;
-            border: none;
-            padding: 0 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .copy-btn:hover {
-            background-color: #0d62d9;
-        }
-
-        .share-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-
-        .share-btn {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
-        }
-
-        .share-whatsapp {
-            background-color: #25D366;
-            color: white;
-        }
-
-        .share-email {
-            background-color: #EA4335;
-            color: white;
-        }
-
-        .share-telegram {
-            background-color: #0088cc;
-            color: white;
-        }
-
-        .share-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-
-        .qr-code-container {
-            text-align: center;
-            margin-top: 20px;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-        }
-
-        #qrCode {
-            max-width: 200px;
-            margin: 0 auto;
-        }
-
-        .stats {
-            display: flex;
-            gap: 20px;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #eaeaea;
-        }
-
-        .stat-item {
-            flex: 1;
-            text-align: center;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #1a73e8;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            color: #5f6368;
-            margin-top: 5px;
-        }
-
-        .notification {
+        /* Toast Notifications */
+        .toast {
             position: fixed;
-            top: 20px;
+            bottom: 20px;
             right: 20px;
-            padding: 15px 20px;
-            background: #34a853;
+            background: var(--text-primary);
             color: white;
+            padding: 12px 24px;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            display: none;
-            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 3000;
             animation: slideIn 0.3s ease;
+            display: none;
         }
 
         @keyframes slideIn {
@@ -499,213 +712,244 @@
             to { transform: translateX(0); opacity: 1; }
         }
 
-        .url-shortener {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-            border: 2px dashed #1a73e8;
+        .toast.success {
+            background: var(--secondary-color);
         }
 
-        .short-url-result {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            align-items: center;
+        .toast.error {
+            background: var(--error-color);
         }
 
-        .short-url-input {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-family: monospace;
-        }
-
-        .public-badge {
-            background: #34a853;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-left: 10px;
+        .toast.info {
+            background: var(--primary-color);
         }
     </style>
-    <!-- QR Code Generator -->
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="header-content">
-                <div>
-                    <h1><i class="fas fa-file-pdf"></i> Public PDF Viewer</h1>
-                    <p class="subtitle">Access PDFs directly without login - Share with anyone!</p>
-                </div>
-                <div class="firebase-path">
-                    <i class="fas fa-database"></i> schooladmin-51cdd-default-rtdb.firebaseio.com/homeworks
-                </div>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="app-title">
+                <i class="fas fa-book-open"></i>
+                <h1>Homework Viewer</h1>
             </div>
-            <div style="margin-top: 15px; display: flex; align-items: center; gap: 10px;">
-                <span class="public-badge"><i class="fas fa-globe"></i> Public Access</span>
-                <span>No login required • Direct links • Share anywhere</span>
+            <div class="header-actions">
+                <button class="btn-header" id="shareAllBtn">
+                    <i class="fas fa-share-alt"></i> Share All
+                </button>
+                <button class="btn-header" id="refreshBtn">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
             </div>
-        </header>
-
-        <div class="firebase-status" id="connectionStatus">
-            <div class="status-dot"></div>
-            <span>Connecting to Firebase Database...</span>
         </div>
+    </header>
 
+    <!-- Main Content -->
+    <div class="container">
         <div class="main-content">
-            <div class="sidebar">
-                <h2><i class="fas fa-filter"></i> Filter & Controls</h2>
-                
-                <div class="filter-section">
-                    <input type="text" id="searchInput" class="filter-input" placeholder="Search PDFs by chapter name...">
+            <!-- Homework Details Card -->
+            <div class="homework-card">
+                <div class="card-content">
+                    <div class="subject-row">
+                        <div class="subject-title" id="subjectTitle">Loading...</div>
+                        <div class="status-chip" id="statusChip">ACTIVE</div>
+                    </div>
+                    <div class="chapter-name" id="chapterName">Loading chapter name...</div>
                     
-                    <div class="filter-buttons">
-                        <button class="btn btn-primary" id="loadPdfsBtn">
-                            <i class="fas fa-sync-alt"></i> Load PDFs
-                        </button>
-                        <button class="btn btn-secondary" id="clearFilterBtn">
-                            <i class="fas fa-times"></i> Clear
-                        </button>
+                    <div class="divider"></div>
+                    
+                    <div class="details-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">Date</span>
+                            <span class="detail-value" id="dateValue">--</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Teacher</span>
+                            <span class="detail-value" id="teacherValue">--</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Auto Delete</span>
+                            <span class="detail-value delete-warning" id="deleteValue">--</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Total Files</span>
+                            <span class="detail-value" id="filesCount">0</span>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="filter-section">
-                    <h3><i class="fas fa-info-circle"></i> Database Info</h3>
-                    <p>Path: <code>/homeworks</code></p>
-                    <p>Total PDFs: <span id="pdfCount">0</span></p>
-                    <p>Selected PDF: <span id="selectedPdf">None</span></p>
-                    <p>Status: <span style="color: #34a853;"><i class="fas fa-check-circle"></i> Public Access</span></p>
-                </div>
-                
-                <div class="link-section">
-                    <h3><i class="fas fa-link"></i> Direct PDF Links</h3>
-                    <p>Share these links with anyone:</p>
-                    
-                    <div class="link-input-group">
-                        <input type="text" id="currentLink" class="link-input" readonly value="Select a PDF first">
-                        <button class="copy-btn" id="copyLinkBtn">
-                            <i class="far fa-copy"></i>
-                        </button>
-                    </div>
-                    
-                    <div class="share-buttons">
-                        <button class="share-btn share-whatsapp" id="shareWhatsApp">
-                            <i class="fab fa-whatsapp"></i> WhatsApp
-                        </button>
-                        <button class="share-btn share-email" id="shareEmail">
-                            <i class="far fa-envelope"></i> Email
-                        </button>
-                        <button class="share-btn share-telegram" id="shareTelegram">
-                            <i class="fab fa-telegram"></i> Telegram
-                        </button>
-                    </div>
-                </div>
+            </div>
 
-                <div class="url-shortener">
-                    <h3><i class="fas fa-compress"></i> Shorten URL</h3>
-                    <p>Create short links for easy sharing:</p>
-                    <div class="short-url-result">
-                        <input type="text" id="shortUrlInput" class="short-url-input" readonly placeholder="Short URL will appear here">
-                        <button class="copy-btn" id="copyShortUrlBtn">
-                            <i class="far fa-copy"></i>
-                        </button>
+            <!-- Images Section -->
+            <div class="files-section" id="imagesSection" style="display: none;">
+                <div class="section-header">
+                    <div class="section-title">Images</div>
+                    <div class="section-count" id="imagesCount">0</div>
+                </div>
+                <div class="scroller-container">
+                    <div class="files-scroller" id="imagesScroller">
+                        <!-- Images will be loaded here -->
                     </div>
-                    <button class="btn btn-success" id="generateShortUrlBtn" style="width: 100%; margin-top: 10px;">
-                        <i class="fas fa-link"></i> Generate Short URL
+                </div>
+            </div>
+
+            <!-- PDFs Section -->
+            <div class="files-section" id="pdfsSection" style="display: none;">
+                <div class="section-header">
+                    <div class="section-title">PDF Documents</div>
+                    <div class="section-count" id="pdfsCount">0</div>
+                </div>
+                <div class="scroller-container">
+                    <div class="files-scroller" id="pdfsScroller">
+                        <!-- PDFs will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Countdown Timer -->
+            <div class="countdown-card" id="countdownCard" style="display: none;">
+                <div class="countdown-header">Auto Delete Countdown</div>
+                <div class="countdown-timer">
+                    <i class="fas fa-clock"></i>
+                    <div class="countdown-text" id="countdownText">--</div>
+                </div>
+                <div class="countdown-note">This homework will be automatically deleted after the countdown ends</div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display: flex; gap: 16px; margin-top: 20px;">
+                <button class="btn-action btn-open" id="backBtn" style="flex: 1;">
+                    <i class="fas fa-arrow-left"></i> Back to List
+                </button>
+                <button class="btn-action btn-download" id="shareBtn" style="flex: 1;">
+                    <i class="fas fa-share"></i> Share Homework
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF Viewer Modal -->
+    <div class="modal-overlay" id="pdfModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="pdfModalTitle">PDF Viewer</div>
+                <button class="modal-close" id="closePdfModal">&times;</button>
+            </div>
+            <div class="pdf-controls">
+                <div class="page-controls">
+                    <button class="btn-control" id="prevPage">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <span class="page-info">
+                        Page <span id="currentPage">1</span> of <span id="totalPages">1</span>
+                    </span>
+                    <button class="btn-control" id="nextPage">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <input type="number" id="pageInput" min="1" value="1" style="width: 60px; padding: 8px; border: 1px solid var(--divider-color); border-radius: 6px;">
+                    <button class="btn-control" id="goPage">
+                        Go
+                    </button>
+                </div>
+                <div class="viewer-actions">
+                    <button class="btn-action btn-download" id="downloadPdf">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                    <button class="btn-action btn-open" id="printPdf">
+                        <i class="fas fa-print"></i> Print
                     </button>
                 </div>
             </div>
-
-            <div class="pdf-list">
-                <h2><i class="fas fa-list"></i> Available PDFs <span id="totalCount" style="font-size: 0.8rem; background: #e8f0fe; padding: 2px 8px; border-radius: 10px;">0</span></h2>
-                
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-value" id="totalPdfs">0</div>
-                        <div class="stat-label">Total PDFs</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="recentPdfs">0</div>
-                        <div class="stat-label">Last 7 Days</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="largePdfs">0</div>
-                        <div class="stat-label">Large Files</div>
-                    </div>
-                </div>
-                
-                <div id="pdfListContainer">
-                    <div class="empty-state">
-                        <i class="fas fa-file-pdf"></i>
-                        <h3>No PDFs Loaded</h3>
-                        <p>Click "Load PDFs" to retrieve PDFs from Firebase Database</p>
+            <div class="modal-body">
+                <div class="pdf-viewer" id="pdfViewer">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <div>Loading PDF...</div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="viewer-container" id="viewerContainer" style="display: none;">
-            <div class="viewer-controls">
-                <h2><i class="fas fa-eye"></i> PDF Viewer</h2>
-                <div class="page-controls">
-                    <div class="page-nav">
-                        <button class="btn btn-secondary" id="prevPage">
-                            <i class="fas fa-chevron-left"></i> Previous
-                        </button>
-                        <span>Page <span id="currentPage">1</span> of <span id="totalPages">1</span></span>
-                        <button class="btn btn-secondary" id="nextPage">
-                            Next <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </div>
-                    <div class="page-nav">
-                        <input type="number" id="pageInput" class="page-input" min="1" value="1">
-                        <button class="btn btn-secondary" id="goToPage">Go</button>
-                    </div>
-                </div>
+    <!-- Image Viewer Modal -->
+    <div class="modal-overlay" id="imageModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="imageModalTitle">Image Viewer</div>
+                <button class="modal-close" id="closeImageModal">&times;</button>
             </div>
-            
-            <div class="pdf-viewer" id="pdfViewer">
-                <div class="empty-state">
-                    <i class="fas fa-file-pdf"></i>
-                    <h3>No PDF Selected</h3>
-                    <p>Select a PDF from the list to view it here</p>
-                </div>
+            <div class="modal-body" style="text-align: center; padding: 0;">
+                <img id="fullImageView" src="" alt="" style="max-width: 100%; max-height: 80vh; object-fit: contain;">
             </div>
-
-            <div class="qr-code-container" id="qrCodeContainer" style="display: none;">
-                <h3><i class="fas fa-qrcode"></i> QR Code for this PDF</h3>
-                <p>Scan to open this PDF on mobile devices</p>
-                <canvas id="qrCode"></canvas>
-                <p style="margin-top: 10px; font-size: 0.9rem; color: #666;">Scan with your phone camera</p>
+            <div style="padding: 20px; text-align: center;">
+                <button class="btn-action btn-download" id="downloadImage">
+                    <i class="fas fa-download"></i> Download Image
+                </button>
             </div>
         </div>
-
-        <footer>
-            <p>Public PDF Viewer &copy; 2023 | Connected to schooladmin-51cdd-default-rtdb.firebaseio.com</p>
-            <p>This is a public access system. Anyone can view and share PDFs using direct links.</p>
-        </footer>
     </div>
 
-    <!-- Notification Toast -->
-    <div class="notification" id="notification">
-        <i class="fas fa-check-circle"></i> <span id="notificationText">Copied to clipboard!</span>
+    <!-- Share Modal -->
+    <div class="modal-overlay" id="shareModal">
+        <div class="share-modal">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div style="font-size: 20px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px;">
+                    Share Homework
+                </div>
+                <div style="font-size: 14px; color: var(--text-secondary);">
+                    Share via different platforms
+                </div>
+            </div>
+
+            <div class="share-options">
+                <div class="share-option" id="shareWhatsapp">
+                    <i class="fab fa-whatsapp share-icon"></i>
+                    <span class="share-label">WhatsApp</span>
+                </div>
+                <div class="share-option" id="shareEmail">
+                    <i class="fas fa-envelope share-icon"></i>
+                    <span class="share-label">Email</span>
+                </div>
+                <div class="share-option" id="shareLink">
+                    <i class="fas fa-link share-icon"></i>
+                    <span class="share-label">Copy Link</span>
+                </div>
+                <div class="share-option" id="shareQr">
+                    <i class="fas fa-qrcode share-icon"></i>
+                    <span class="share-label">QR Code</span>
+                </div>
+            </div>
+
+            <div class="qr-container" id="qrContainer" style="display: none;">
+                <canvas id="qrCodeCanvas"></canvas>
+                <div style="margin-top: 12px; font-size: 14px; color: var(--text-secondary);">
+                    Scan to open on mobile
+                </div>
+            </div>
+
+            <input type="text" class="link-input" id="shareLinkInput" readonly value="Loading...">
+
+            <div style="display: flex; gap: 12px; margin-top: 20px;">
+                <button class="btn-action btn-open" id="closeShareModal" style="flex: 1;">
+                    Cancel
+                </button>
+                <button class="btn-action btn-download" id="copyLinkBtn" style="flex: 1;">
+                    <i class="far fa-copy"></i> Copy Link
+                </button>
+            </div>
+        </div>
     </div>
 
-    <!-- Firebase SDK v9+ (using CDN) -->
+    <!-- Toast Notification -->
+    <div class="toast success" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Operation completed successfully</span>
+    </div>
+
+    <!-- Firebase SDK -->
     <script type="module">
-        // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
-        import { getStorage, ref as storageRef, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-storage.js";
 
-        // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDcKkAf2SRmfiJizVA71fILOqRZTtUGAdY",
             authDomain: "schooladmin-51cdd.firebaseapp.com",
@@ -717,591 +961,618 @@
             measurementId: "G-V8C5DE930K"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
         const database = getDatabase(app);
-        const storage = getStorage(app);
+
+        // Global variables
+        let homeworkData = null;
+        let currentPdfUrl = null;
+        let pdfDoc = null;
+        let currentPage = 1;
+        let totalPages = 1;
+        let pageRendering = false;
+        let pageNumPending = null;
 
         // DOM Elements
-        const pdfListContainer = document.getElementById('pdfListContainer');
+        const homeworkId = getHomeworkIdFromUrl();
+        
+        // Homework details
+        const subjectTitle = document.getElementById('subjectTitle');
+        const statusChip = document.getElementById('statusChip');
+        const chapterName = document.getElementById('chapterName');
+        const dateValue = document.getElementById('dateValue');
+        const teacherValue = document.getElementById('teacherValue');
+        const deleteValue = document.getElementById('deleteValue');
+        const filesCount = document.getElementById('filesCount');
+
+        // Sections
+        const imagesSection = document.getElementById('imagesSection');
+        const imagesScroller = document.getElementById('imagesScroller');
+        const imagesCount = document.getElementById('imagesCount');
+        const pdfsSection = document.getElementById('pdfsSection');
+        const pdfsScroller = document.getElementById('pdfsScroller');
+        const pdfsCount = document.getElementById('pdfsCount');
+        const countdownCard = document.getElementById('countdownCard');
+        const countdownText = document.getElementById('countdownText');
+
+        // Modals
+        const pdfModal = document.getElementById('pdfModal');
+        const imageModal = document.getElementById('imageModal');
+        const shareModal = document.getElementById('shareModal');
+        const closePdfModal = document.getElementById('closePdfModal');
+        const closeImageModal = document.getElementById('closeImageModal');
+        const closeShareModal = document.getElementById('closeShareModal');
+
+        // PDF Viewer elements
         const pdfViewer = document.getElementById('pdfViewer');
-        const viewerContainer = document.getElementById('viewerContainer');
-        const loadPdfsBtn = document.getElementById('loadPdfsBtn');
-        const clearFilterBtn = document.getElementById('clearFilterBtn');
-        const searchInput = document.getElementById('searchInput');
-        const pdfCount = document.getElementById('pdfCount');
-        const totalCount = document.getElementById('totalCount');
-        const selectedPdf = document.getElementById('selectedPdf');
-        const connectionStatus = document.getElementById('connectionStatus');
         const prevPageBtn = document.getElementById('prevPage');
         const nextPageBtn = document.getElementById('nextPage');
         const currentPageSpan = document.getElementById('currentPage');
         const totalPagesSpan = document.getElementById('totalPages');
         const pageInput = document.getElementById('pageInput');
-        const goToPageBtn = document.getElementById('goToPage');
-        const currentLink = document.getElementById('currentLink');
+        const goPageBtn = document.getElementById('goPage');
+        const downloadPdfBtn = document.getElementById('downloadPdf');
+        const printPdfBtn = document.getElementById('printPdf');
+        const pdfModalTitle = document.getElementById('pdfModalTitle');
+
+        // Image Viewer
+        const fullImageView = document.getElementById('fullImageView');
+        const downloadImageBtn = document.getElementById('downloadImage');
+        const imageModalTitle = document.getElementById('imageModalTitle');
+
+        // Share modal
+        const shareLinkInput = document.getElementById('shareLinkInput');
         const copyLinkBtn = document.getElementById('copyLinkBtn');
-        const shareWhatsApp = document.getElementById('shareWhatsApp');
-        const shareEmail = document.getElementById('shareEmail');
-        const shareTelegram = document.getElementById('shareTelegram');
-        const notification = document.getElementById('notification');
-        const notificationText = document.getElementById('notificationText');
-        const qrCodeContainer = document.getElementById('qrCodeContainer');
-        const qrCodeCanvas = document.getElementById('qrCode');
-        const generateShortUrlBtn = document.getElementById('generateShortUrlBtn');
-        const shortUrlInput = document.getElementById('shortUrlInput');
-        const copyShortUrlBtn = document.getElementById('copyShortUrlBtn');
-        const totalPdfs = document.getElementById('totalPdfs');
-        const recentPdfs = document.getElementById('recentPdfs');
-        const largePdfs = document.getElementById('largePdfs');
+        const qrContainer = document.getElementById('qrContainer');
+        const qrCodeCanvas = document.getElementById('qrCodeCanvas');
+        const shareWhatsappBtn = document.getElementById('shareWhatsapp');
+        const shareEmailBtn = document.getElementById('shareEmail');
+        const shareLinkBtn = document.getElementById('shareLink');
+        const shareQrBtn = document.getElementById('shareQr');
 
-        // Global variables
-        let pdfList = [];
-        let filteredPdfList = [];
-        let currentPdf = null;
-        let pdfDoc = null;
-        let pageNum = 1;
-        let pageRendering = false;
-        let pageNumPending = null;
-        let baseUrl = window.location.origin + window.location.pathname;
+        // Buttons
+        const backBtn = document.getElementById('backBtn');
+        const shareBtn = document.getElementById('shareBtn');
+        const shareAllBtn = document.getElementById('shareAllBtn');
+        const refreshBtn = document.getElementById('refreshBtn');
 
-        // Firebase connection status
-        const connectedRef = ref(database, '.info/connected');
-        onValue(connectedRef, (snap) => {
-            if (snap.val() === true) {
-                connectionStatus.innerHTML = '<div class="status-dot"></div><span>Connected to Firebase Database</span>';
-                connectionStatus.className = "firebase-status status-connected";
-            } else {
-                connectionStatus.innerHTML = '<div class="status-dot"></div><span>Disconnected from Firebase Database</span>';
-                connectionStatus.className = "firebase-status status-disconnected";
-            }
-        });
+        // Toast
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
 
-        // Load PDFs from Firebase
-        function loadPdfsFromFirebase() {
-            try {
-                // Show loading state
-                pdfListContainer.innerHTML = `
-                    <div class="loading">
-                        <div class="loading-spinner"></div>
-                        <p>Loading PDFs from Firebase Database...</p>
-                    </div>
-                `;
-                
-                // Get reference to the homeworks path
-                const homeworksRef = ref(database, 'homeworks');
-                
-                // Fetch data using onValue for realtime updates
-                onValue(homeworksRef, (snapshot) => {
-                    const data = snapshot.val();
-                    
-                    // Process data
-                    pdfList = [];
-                    if (data) {
-                        Object.keys(data).forEach(key => {
-                            const pdfData = data[key];
-                            pdfList.push({
-                                id: key,
-                                chapterName: pdfData.chapterName || "Untitled Chapter",
-                                compressionLevel: pdfData.compressionLevel || "Unknown",
-                                createdAt: pdfData.createdAt || 0,
-                                createdDate: pdfData.createdDate || "Unknown date",
-                                deletionTimestamp: pdfData.deletionTimestamp || null,
-                                pdfUrl: pdfData.pdfUrl || null,
-                                fileSize: pdfData.fileSize || "Unknown",
-                                downloadCount: pdfData.downloadCount || 0,
-                                viewCount: pdfData.viewCount || 0
-                            });
-                        });
-                        
-                        // Sort by creation date (newest first)
-                        pdfList.sort((a, b) => b.createdAt - a.createdAt);
-                    }
-                    
-                    // Update UI
-                    updatePdfList();
-                    updateStats();
-                    
-                }, {
-                    onlyOnce: false // Keep listening for updates
-                });
-                
-            } catch (error) {
-                console.error("Error loading PDFs:", error);
-                pdfListContainer.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <h3>Error Loading PDFs</h3>
-                        <p>${error.message}</p>
-                        <p>Check your Firebase configuration and database rules.</p>
-                    </div>
-                `;
-            }
+        // Get homework ID from URL
+        function getHomeworkIdFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id') || '-Ohw7jwqCUrCimAmYgbM'; // Default to first homework
         }
 
-        // Update PDF list UI
-        function updatePdfList() {
-            // Apply search filter
-            const searchTerm = searchInput.value.toLowerCase();
-            filteredPdfList = pdfList.filter(pdf => 
-                pdf.chapterName.toLowerCase().includes(searchTerm) ||
-                pdf.createdDate.toLowerCase().includes(searchTerm)
-            );
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            toastMessage.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.style.display = 'flex';
             
-            // Update count
-            pdfCount.textContent = filteredPdfList.length;
-            totalCount.textContent = pdfList.length;
-            
-            // If no PDFs found
-            if (filteredPdfList.length === 0) {
-                pdfListContainer.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-file-pdf"></i>
-                        <h3>No PDFs Found</h3>
-                        <p>${searchTerm ? 'Try a different search term' : 'No PDFs in the database'}</p>
-                    </div>
-                `;
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // Copy text to clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                showToast('Failed to copy', 'error');
+            });
+        }
+
+        // Load homework data
+        function loadHomeworkData() {
+            if (!homeworkId) {
+                showToast('No homework ID provided', 'error');
                 return;
             }
+
+            const homeworkRef = ref(database, `homeworks/${homeworkId}`);
             
-            // Generate PDF list HTML
-            let html = '';
-            filteredPdfList.forEach((pdf, index) => {
-                const isActive = currentPdf && currentPdf.id === pdf.id ? 'active' : '';
-                const date = new Date(pdf.createdAt).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric'
+            onValue(homeworkRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    homeworkData = data;
+                    updateUI();
+                } else {
+                    showToast('Homework not found', 'error');
+                }
+            }, (error) => {
+                console.error('Error loading homework:', error);
+                showToast('Error loading homework data', 'error');
+            });
+        }
+
+        // Update UI with homework data
+        function updateUI() {
+            if (!homeworkData) return;
+
+            // Set basic info
+            subjectTitle.textContent = homeworkData.chapterName || 'Homework';
+            chapterName.textContent = homeworkData.chapterName || 'No chapter name provided';
+            dateValue.textContent = homeworkData.createdDate || '--';
+            teacherValue.textContent = 'Unknown Teacher'; // You might want to fetch teacher name
+            
+            // Set status
+            const isActive = homeworkData.deletionTimestamp && 
+                            homeworkData.deletionTimestamp > Date.now();
+            statusChip.textContent = isActive ? 'ACTIVE' : 'EXPIRED';
+            statusChip.style.background = isActive ? 'var(--secondary-color)' : 'var(--error-color)';
+
+            // Set auto delete info
+            if (homeworkData.deletionTimestamp) {
+                const daysLeft = Math.ceil((homeworkData.deletionTimestamp - Date.now()) / (1000 * 60 * 60 * 24));
+                if (daysLeft > 0) {
+                    deleteValue.textContent = `${daysLeft} days left`;
+                    deleteValue.style.color = 'var(--warning-color)';
+                    
+                    // Show and start countdown
+                    countdownCard.style.display = 'block';
+                    startCountdown(homeworkData.deletionTimestamp);
+                } else {
+                    deleteValue.textContent = 'Expired - Will be deleted soon';
+                    deleteValue.style.color = 'var(--error-color)';
+                    countdownCard.style.display = 'none';
+                }
+            } else {
+                deleteValue.textContent = 'No auto-delete scheduled';
+                deleteValue.style.color = 'var(--text-secondary)';
+                countdownCard.style.display = 'none';
+            }
+
+            // Process files
+            let imageUrls = [];
+            let pdfUrls = [];
+            let totalFiles = 0;
+
+            // Check for imageUrls array
+            if (homeworkData.imageUrls && Array.isArray(homeworkData.imageUrls)) {
+                imageUrls = homeworkData.imageUrls.filter(url => url && typeof url === 'string');
+            }
+
+            // Check for pdfUrls array
+            if (homeworkData.pdfUrls && Array.isArray(homeworkData.pdfUrls)) {
+                pdfUrls = homeworkData.pdfUrls.filter(url => url && typeof url === 'string')
+                    .map(url => url.endsWith('.pdf') ? url : url + '.pdf');
+            }
+
+            // For backward compatibility, check fileUrls
+            if (homeworkData.fileUrls && Array.isArray(homeworkData.fileUrls)) {
+                homeworkData.fileUrls.forEach(url => {
+                    if (!url || typeof url !== 'string') return;
+                    
+                    if (url.toLowerCase().match(/\.(jpg|jpeg|png|gif|webp|bmp)$/)) {
+                        imageUrls.push(url);
+                    } else if (url.toLowerCase().includes('.pdf')) {
+                        pdfUrls.push(url.endsWith('.pdf') ? url : url + '.pdf');
+                    }
                 });
+            }
+
+            // Update counts
+            imagesCount.textContent = imageUrls.length;
+            pdfsCount.textContent = pdfUrls.length;
+            totalFiles = imageUrls.length + pdfUrls.length;
+            filesCount.textContent = totalFiles;
+
+            // Show/hide sections
+            if (imageUrls.length > 0) {
+                imagesSection.style.display = 'block';
+                renderImages(imageUrls);
+            } else {
+                imagesSection.style.display = 'none';
+            }
+
+            if (pdfUrls.length > 0) {
+                pdfsSection.style.display = 'block';
+                renderPDFs(pdfUrls);
+            } else {
+                pdfsSection.style.display = 'none';
+            }
+
+            // Update share link
+            const shareLink = `${window.location.origin}${window.location.pathname}?id=${homeworkId}`;
+            shareLinkInput.value = shareLink;
+        }
+
+        // Render images in horizontal scroller
+        function renderImages(imageUrls) {
+            imagesScroller.innerHTML = '';
+            
+            imageUrls.forEach((url, index) => {
+                const fileName = getFileNameFromUrl(url);
+                const fileSize = getFileSizeFromUrl(url);
                 
-                // Generate direct link
-                const directLink = `${baseUrl}?pdf=${pdf.id}`;
-                
-                html += `
-                    <div class="pdf-item ${isActive}" data-id="${pdf.id}" data-index="${index}">
-                        <div class="pdf-info">
-                            <h3>${pdf.chapterName}</h3>
-                            <div class="pdf-meta">
-                                <span><i class="far fa-calendar"></i> ${date}</span>
-                                <span><i class="fas fa-compress"></i> ${pdf.compressionLevel}</span>
-                                <span><i class="fas fa-eye"></i> ${pdf.viewCount || 0} views</span>
-                            </div>
+                const card = document.createElement('div');
+                card.className = 'file-card image-card';
+                card.innerHTML = `
+                    <div class="image-preview">
+                        <img src="${url}" alt="${fileName}" loading="lazy">
+                    </div>
+                    <div class="file-info">
+                        <div class="file-name">${fileName}</div>
+                        <div class="file-meta">
+                            <span class="file-size">${fileSize}</span>
+                            <span class="file-count">${index + 1}</span>
                         </div>
-                        <div class="pdf-actions">
-                            <button class="action-btn view-pdf-btn" title="View PDF">
-                                <i class="fas fa-eye"></i>
+                        <div class="file-actions">
+                            <button class="btn-action btn-open view-image" data-url="${url}" data-name="${fileName}">
+                                <i class="fas fa-eye"></i> View
                             </button>
-                            <button class="action-btn link-pdf-btn" title="Get Link">
-                                <i class="fas fa-link"></i>
+                            <button class="btn-action btn-download download-image" data-url="${url}" data-name="${fileName}">
+                                <i class="fas fa-download"></i> Save
                             </button>
-                            ${pdf.pdfUrl ? `<button class="action-btn download-pdf-btn" title="Download PDF">
-                                <i class="fas fa-download"></i>
-                            </button>` : ''}
                         </div>
                     </div>
                 `;
+                
+                imagesScroller.appendChild(card);
             });
-            
-            pdfListContainer.innerHTML = html;
-            
-            // Add event listeners to PDF items
-            document.querySelectorAll('.pdf-item').forEach(item => {
-                item.addEventListener('click', function(e) {
-                    if (!e.target.classList.contains('action-btn')) {
-                        const pdfId = this.getAttribute('data-id');
-                        const pdfIndex = this.getAttribute('data-index');
-                        selectPdf(pdfId, parseInt(pdfIndex));
-                    }
+
+            // Add event listeners
+            document.querySelectorAll('.view-image').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const url = e.target.closest('button').dataset.url;
+                    const name = e.target.closest('button').dataset.name;
+                    openImageViewer(url, name);
                 });
             });
-            
-            // Add event listeners to view buttons
-            document.querySelectorAll('.view-pdf-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const pdfItem = this.closest('.pdf-item');
-                    const pdfId = pdfItem.getAttribute('data-id');
-                    const pdfIndex = pdfItem.getAttribute('data-index');
-                    selectPdf(pdfId, parseInt(pdfIndex));
-                });
-            });
-            
-            // Add event listeners to link buttons
-            document.querySelectorAll('.link-pdf-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const pdfItem = this.closest('.pdf-item');
-                    const pdfId = pdfItem.getAttribute('data-id');
-                    const pdf = pdfList.find(p => p.id === pdfId);
-                    
-                    if (pdf) {
-                        const directLink = `${baseUrl}?pdf=${pdf.id}`;
-                        currentLink.value = directLink;
-                        showNotification('Link copied to clipboard!');
-                        copyToClipboard(directLink);
-                    }
-                });
-            });
-            
-            // Add event listeners to download buttons
-            document.querySelectorAll('.download-pdf-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const pdfItem = this.closest('.pdf-item');
-                    const pdfId = pdfItem.getAttribute('data-id');
-                    const pdf = pdfList.find(p => p.id === pdfId);
-                    
-                    if (pdf && pdf.pdfUrl) {
-                        window.open(pdf.pdfUrl, '_blank');
-                        showNotification('Opening PDF download...');
-                    } else {
-                        showNotification('PDF download URL not available', 'error');
-                    }
+
+            document.querySelectorAll('.download-image').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const url = e.target.closest('button').dataset.url;
+                    const name = e.target.closest('button').dataset.name;
+                    downloadFile(url, name);
                 });
             });
         }
 
-        // Update statistics
-        function updateStats() {
-            totalPdfs.textContent = pdfList.length;
+        // Render PDFs in horizontal scroller
+        function renderPDFs(pdfUrls) {
+            pdfsScroller.innerHTML = '';
             
-            // Count PDFs from last 7 days
-            const sevenDaysAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
-            const recentCount = pdfList.filter(pdf => pdf.createdAt > sevenDaysAgo).length;
-            recentPdfs.textContent = recentCount;
-            
-            // Count large PDFs (assuming compressionLevel indicates size)
-            const largeCount = pdfList.filter(pdf => 
-                pdf.compressionLevel === 'low' || 
-                pdf.compressionLevel === 'none' ||
-                pdf.fileSize === 'large'
-            ).length;
-            largePdfs.textContent = largeCount;
-        }
-        
-        // Select a PDF to view
-        function selectPdf(pdfId, pdfIndex) {
-            currentPdf = pdfList.find(p => p.id === pdfId);
-            
-            if (!currentPdf) return;
-            
-            // Update UI
-            selectedPdf.textContent = currentPdf.chapterName;
-            
-            // Generate and display direct link
-            const directLink = `${baseUrl}?pdf=${pdfId}`;
-            currentLink.value = directLink;
-            
-            // Update URL without reloading page
-            window.history.pushState({}, '', directLink);
-            
-            // Highlight selected PDF
-            document.querySelectorAll('.pdf-item').forEach(item => {
-                item.classList.remove('active');
+            pdfUrls.forEach((url, index) => {
+                const fileName = getFileNameFromUrl(url);
+                const fileSize = getFileSizeFromUrl(url);
+                
+                const card = document.createElement('div');
+                card.className = 'file-card pdf-card';
+                card.innerHTML = `
+                    <div class="file-info">
+                        <div style="text-align: center; margin-bottom: 16px;">
+                            <i class="fas fa-file-pdf" style="font-size: 48px; color: var(--error-color);"></i>
+                        </div>
+                        <div class="file-name">${fileName}</div>
+                        <div class="file-meta">
+                            <span class="file-size">${fileSize}</span>
+                            <span class="file-count">PDF</span>
+                        </div>
+                        <div class="file-actions">
+                            <button class="btn-action btn-open view-pdf" data-url="${url}" data-name="${fileName}">
+                                <i class="fas fa-eye"></i> Open
+                            </button>
+                            <button class="btn-action btn-download download-pdf" data-url="${url}" data-name="${fileName}">
+                                <i class="fas fa-download"></i> Save
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                pdfsScroller.appendChild(card);
             });
-            document.querySelector(`.pdf-item[data-id="${pdfId}"]`).classList.add('active');
-            
-            // Show viewer
-            viewerContainer.style.display = 'block';
-            
-            // Load PDF for viewing
-            loadPdfForViewing(currentPdf);
-            
-            // Generate QR Code
-            generateQRCode(directLink);
-            
-            // Show QR Code container
-            qrCodeContainer.style.display = 'block';
+
+            // Add event listeners
+            document.querySelectorAll('.view-pdf').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const url = e.target.closest('button').dataset.url;
+                    const name = e.target.closest('button').dataset.name;
+                    openPDFViewer(url, name);
+                });
+            });
+
+            document.querySelectorAll('.download-pdf').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const url = e.target.closest('button').dataset.url;
+                    const name = e.target.closest('button').dataset.name;
+                    downloadFile(url, name);
+                });
+            });
         }
-        
-        // Load PDF for viewing (using PDF.js)
-        async function loadPdfForViewing(pdf) {
-            // Show loading state
+
+        // Get file name from URL
+        function getFileNameFromUrl(url) {
+            try {
+                const urlObj = new URL(url);
+                const path = urlObj.pathname;
+                const fileName = path.split('/').pop();
+                return fileName || 'file';
+            } catch {
+                const segments = url.split('/');
+                return segments.pop() || 'file';
+            }
+        }
+
+        // Get file size from URL (placeholder)
+        function getFileSizeFromUrl(url) {
+            // In a real app, you would fetch the file size from headers
+            // For now, return a placeholder
+            if (url.toLowerCase().includes('.pdf')) {
+                return 'PDF Document';
+            } else if (url.toLowerCase().match(/\.(jpg|jpeg|png|gif)$/)) {
+                return 'Image';
+            }
+            return 'File';
+        }
+
+        // Open PDF viewer
+        function openPDFViewer(url, name) {
+            currentPdfUrl = url;
+            pdfModalTitle.textContent = name;
+            pdfModal.style.display = 'flex';
+            
+            // Reset PDF viewer
             pdfViewer.innerHTML = `
                 <div class="loading">
-                    <div class="loading-spinner"></div>
-                    <p>Loading PDF: ${pdf.chapterName}</p>
-                    <p>${pdf.pdfUrl ? `Loading from: ${pdf.pdfUrl.substring(0, 50)}...` : 'Using demo PDF (no URL provided in database)'}</p>
+                    <div class="spinner"></div>
+                    <div>Loading PDF...</div>
                 </div>
             `;
             
+            // Load PDF
+            loadPDF(url);
+        }
+
+        // Load PDF using PDF.js
+        async function loadPDF(url) {
             try {
-                // Try to load from provided URL, fallback to demo PDF
-                const pdfUrl = pdf.pdfUrl || 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf';
-                
-                // Initialize PDF.js
-                const loadingTask = pdfjsLib.getDocument(pdfUrl);
+                const loadingTask = pdfjsLib.getDocument(url);
                 pdfDoc = await loadingTask.promise;
                 
-                // Update page info
-                totalPagesSpan.textContent = pdfDoc.numPages;
-                pageInput.max = pdfDoc.numPages;
+                totalPages = pdfDoc.numPages;
+                totalPagesSpan.textContent = totalPages;
+                pageInput.max = totalPages;
                 
-                // Render first page
-                pageNum = 1;
-                renderPage(pageNum);
-                
-                showNotification('PDF loaded successfully!');
-                
+                renderPage(1);
             } catch (error) {
-                console.error("Error loading PDF:", error);
+                console.error('Error loading PDF:', error);
                 pdfViewer.innerHTML = `
                     <div class="empty-state">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <h3>Error Loading PDF</h3>
-                        <p>${error.message}</p>
-                        <p>PDF could not be loaded. ${pdf.pdfUrl ? 'Check if the URL is accessible.' : 'No PDF URL provided in database.'}</p>
+                        <div class="empty-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="empty-text">Error loading PDF</div>
+                        <div class="empty-subtext">${error.message}</div>
                     </div>
                 `;
-                showNotification('Error loading PDF', 'error');
+                showToast('Error loading PDF', 'error');
             }
         }
-        
+
         // Render PDF page
-        async function renderPage(num) {
+        async function renderPage(pageNumber) {
+            if (!pdfDoc) return;
+            
             pageRendering = true;
             
             try {
-                const page = await pdfDoc.getPage(num);
-                
-                // Set scale for canvas
+                const page = await pdfDoc.getPage(pageNumber);
                 const viewport = page.getViewport({ scale: 1.5 });
+                
                 const canvas = document.createElement('canvas');
                 const context = canvas.getContext('2d');
                 canvas.height = viewport.height;
                 canvas.width = viewport.width;
                 
-                // Render PDF page into canvas context
                 const renderContext = {
                     canvasContext: context,
                     viewport: viewport
                 };
                 
-                const renderTask = page.render(renderContext);
-                await renderTask.promise;
+                await page.render(renderContext).promise;
                 
-                // Display the page
+                // Clear and add canvas
                 pdfViewer.innerHTML = '';
-                const canvasContainer = document.createElement('div');
-                canvasContainer.className = 'canvas-container';
-                canvasContainer.appendChild(canvas);
-                pdfViewer.appendChild(canvasContainer);
+                pdfViewer.appendChild(canvas);
                 
                 // Update page info
-                currentPageSpan.textContent = num;
-                pageInput.value = num;
+                currentPage = pageNumber;
+                currentPageSpan.textContent = currentPage;
+                pageInput.value = currentPage;
                 
                 pageRendering = false;
                 
-                // If there's a pending page, render it
                 if (pageNumPending !== null) {
                     renderPage(pageNumPending);
                     pageNumPending = null;
                 }
-                
             } catch (error) {
-                console.error("Error rendering PDF page:", error);
+                console.error('Error rendering page:', error);
             }
         }
-        
-        // Queue rendering of a page
-        function queueRenderPage(num) {
+
+        // Queue page render
+        function queueRenderPage(pageNumber) {
             if (pageRendering) {
-                pageNumPending = num;
+                pageNumPending = pageNumber;
             } else {
-                renderPage(num);
+                renderPage(pageNumber);
             }
         }
-        
-        // Generate QR Code
-        function generateQRCode(url) {
-            try {
-                QRCode.toCanvas(qrCodeCanvas, url, {
-                    width: 200,
-                    margin: 2,
-                    color: {
-                        dark: '#1a73e8',
-                        light: '#ffffff'
-                    }
-                }, function (error) {
-                    if (error) console.error(error);
-                });
-            } catch (error) {
-                console.error("Error generating QR code:", error);
-            }
+
+        // Open image viewer
+        function openImageViewer(url, name) {
+            imageModalTitle.textContent = name;
+            fullImageView.src = url;
+            imageModal.style.display = 'flex';
         }
-        
-        // Copy to clipboard
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                console.log('Text copied to clipboard');
-            }).catch(err => {
-                console.error('Failed to copy text: ', err);
-                // Fallback for older browsers
-                const textArea = document.createElement('textarea');
-                textArea.value = text;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-            });
+
+        // Download file
+        function downloadFile(url, fileName) {
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast('Download started');
         }
-        
-        // Show notification
-        function showNotification(message, type = 'success') {
-            notificationText.textContent = message;
-            notification.style.background = type === 'error' ? '#ea4335' : '#34a853';
-            notification.style.display = 'block';
-            
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 3000);
-        }
-        
-        // Generate short URL (using is.gd API as example)
-        async function generateShortUrl(longUrl) {
-            try {
-                showNotification('Generating short URL...');
+
+        // Start countdown timer
+        function startCountdown(deletionTimestamp) {
+            function updateCountdown() {
+                const now = Date.now();
+                const timeLeft = deletionTimestamp - now;
                 
-                // Using is.gd URL shortener (free, no API key required)
-                const response = await fetch(`https://is.gd/create.php?format=simple&url=${encodeURIComponent(longUrl)}`);
-                
-                if (response.ok) {
-                    const shortUrl = await response.text();
-                    shortUrlInput.value = shortUrl;
-                    showNotification('Short URL generated!');
-                } else {
-                    throw new Error('Failed to generate short URL');
+                if (timeLeft <= 0) {
+                    countdownText.textContent = 'EXPIRED';
+                    return;
                 }
-            } catch (error) {
-                console.error('Error generating short URL:', error);
-                // Fallback to a simple hash-based short URL
-                const shortUrl = `${baseUrl}#${btoa(longUrl).substring(0, 8)}`;
-                shortUrlInput.value = shortUrl;
-                showNotification('Using local short URL');
+                
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                
+                countdownText.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+                
+                requestAnimationFrame(updateCountdown);
             }
+            
+            updateCountdown();
+        }
+
+        // Generate QR code
+        function generateQRCode(text) {
+            qrContainer.style.display = 'block';
+            QRCode.toCanvas(qrCodeCanvas, text, {
+                width: 200,
+                margin: 2,
+                color: {
+                    dark: '#1a73e8',
+                    light: '#ffffff'
+                }
+            });
         }
 
         // Event Listeners
-        loadPdfsBtn.addEventListener('click', loadPdfsFromFirebase);
-        
-        clearFilterBtn.addEventListener('click', () => {
-            searchInput.value = '';
-            updatePdfList();
+        closePdfModal.addEventListener('click', () => {
+            pdfModal.style.display = 'none';
         });
-        
-        searchInput.addEventListener('input', updatePdfList);
-        
-        copyLinkBtn.addEventListener('click', () => {
-            if (currentLink.value && currentLink.value !== 'Select a PDF first') {
-                copyToClipboard(currentLink.value);
-                showNotification('Link copied to clipboard!');
-            }
+
+        closeImageModal.addEventListener('click', () => {
+            imageModal.style.display = 'none';
         });
-        
-        copyShortUrlBtn.addEventListener('click', () => {
-            if (shortUrlInput.value) {
-                copyToClipboard(shortUrlInput.value);
-                showNotification('Short URL copied!');
-            }
+
+        closeShareModal.addEventListener('click', () => {
+            shareModal.style.display = 'none';
+            qrContainer.style.display = 'none';
         });
-        
-        generateShortUrlBtn.addEventListener('click', () => {
-            if (currentLink.value && currentLink.value !== 'Select a PDF first') {
-                generateShortUrl(currentLink.value);
-            } else {
-                showNotification('Please select a PDF first', 'error');
-            }
-        });
-        
-        shareWhatsApp.addEventListener('click', () => {
-            if (currentLink.value && currentLink.value !== 'Select a PDF first') {
-                const message = `Check out this PDF: ${currentPdf?.chapterName}\n${currentLink.value}`;
-                window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
-            }
-        });
-        
-        shareEmail.addEventListener('click', () => {
-            if (currentLink.value && currentLink.value !== 'Select a PDF first') {
-                const subject = `PDF: ${currentPdf?.chapterName}`;
-                const body = `Check out this PDF:\n\n${currentLink.value}\n\nShared via PDF Viewer`;
-                window.open(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
-            }
-        });
-        
-        shareTelegram.addEventListener('click', () => {
-            if (currentLink.value && currentLink.value !== 'Select a PDF first') {
-                const message = `Check out this PDF: ${currentPdf?.chapterName}\n${currentLink.value}`;
-                window.open(`https://t.me/share/url?url=${encodeURIComponent(currentLink.value)}&text=${encodeURIComponent(currentPdf?.chapterName)}`, '_blank');
-            }
-        });
-        
+
         prevPageBtn.addEventListener('click', () => {
-            if (pageNum <= 1) return;
-            pageNum--;
-            queueRenderPage(pageNum);
-        });
-        
-        nextPageBtn.addEventListener('click', () => {
-            if (pageNum >= pdfDoc.numPages) return;
-            pageNum++;
-            queueRenderPage(pageNum);
-        });
-        
-        goToPageBtn.addEventListener('click', () => {
-            const pageNumber = parseInt(pageInput.value);
-            if (pageNumber >= 1 && pageNumber <= pdfDoc.numPages) {
-                pageNum = pageNumber;
-                queueRenderPage(pageNum);
+            if (currentPage > 1) {
+                queueRenderPage(currentPage - 1);
             }
         });
-        
+
+        nextPageBtn.addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                queueRenderPage(currentPage + 1);
+            }
+        });
+
+        goPageBtn.addEventListener('click', () => {
+            const pageNumber = parseInt(pageInput.value);
+            if (pageNumber >= 1 && pageNumber <= totalPages) {
+                queueRenderPage(pageNumber);
+            }
+        });
+
         pageInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
-                goToPageBtn.click();
+                goPageBtn.click();
             }
         });
 
-        // Check for PDF ID in URL on page load
-        window.addEventListener('DOMContentLoaded', () => {
-            // Load PDFs automatically
-            loadPdfsFromFirebase();
-            
-            // Check for PDF ID in URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const pdfId = urlParams.get('pdf');
-            
-            if (pdfId) {
-                // Wait for PDFs to load, then select the specified PDF
-                const checkAndSelectPdf = setInterval(() => {
-                    if (pdfList.length > 0) {
-                        const pdf = pdfList.find(p => p.id === pdfId);
-                        if (pdf) {
-                            selectPdf(pdfId, pdfList.indexOf(pdf));
-                            showNotification(`Opened PDF: ${pdf.chapterName}`);
-                        }
-                        clearInterval(checkAndSelectPdf);
+        downloadPdfBtn.addEventListener('click', () => {
+            if (currentPdfUrl) {
+                const fileName = getFileNameFromUrl(currentPdfUrl);
+                downloadFile(currentPdfUrl, fileName);
+            }
+        });
+
+        printPdfBtn.addEventListener('click', () => {
+            window.open(currentPdfUrl, '_blank');
+        });
+
+        downloadImageBtn.addEventListener('click', () => {
+            const url = fullImageView.src;
+            const fileName = getFileNameFromUrl(url);
+            downloadFile(url, fileName);
+        });
+
+        shareBtn.addEventListener('click', () => {
+            shareModal.style.display = 'flex';
+        });
+
+        shareAllBtn.addEventListener('click', () => {
+            shareModal.style.display = 'flex';
+        });
+
+        copyLinkBtn.addEventListener('click', () => {
+            copyToClipboard(shareLinkInput.value);
+        });
+
+        shareWhatsappBtn.addEventListener('click', () => {
+            const text = `Check out this homework: ${homeworkData?.chapterName || 'Homework'}\n${shareLinkInput.value}`;
+            const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        });
+
+        shareEmailBtn.addEventListener('click', () => {
+            const subject = `Homework: ${homeworkData?.chapterName || 'Homework'}`;
+            const body = `Check out this homework:\n\n${shareLinkInput.value}`;
+            const url = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.open(url, '_blank');
+        });
+
+        shareLinkBtn.addEventListener('click', () => {
+            copyToClipboard(shareLinkInput.value);
+        });
+
+        shareQrBtn.addEventListener('click', () => {
+            generateQRCode(shareLinkInput.value);
+        });
+
+        backBtn.addEventListener('click', () => {
+            window.history.back();
+        });
+
+        refreshBtn.addEventListener('click', () => {
+            loadHomeworkData();
+            showToast('Refreshing...');
+        });
+
+        // Close modals on overlay click
+        [pdfModal, imageModal, shareModal].forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                    if (modal === shareModal) {
+                        qrContainer.style.display = 'none';
                     }
-                }, 500);
-                
-                // Stop checking after 5 seconds
-                setTimeout(() => clearInterval(checkAndSelectPdf), 5000);
-            }
+                }
+            });
         });
 
-        // Handle browser back/forward buttons
-        window.addEventListener('popstate', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const pdfId = urlParams.get('pdf');
-            
-            if (pdfId && pdfList.length > 0) {
-                const pdf = pdfList.find(p => p.id === pdfId);
-                if (pdf) {
-                    selectPdf(pdfId, pdfList.indexOf(pdf));
-                }
-            }
-        });
+        // Initialize
+        loadHomeworkData();
     </script>
 </body>
 </html>
