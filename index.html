@@ -1,8 +1,8 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homework PDF Viewer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -33,7 +33,6 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Roboto', sans-serif;
-            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -41,131 +40,137 @@
             color: var(--text-primary);
             line-height: 1.6;
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
         .container {
-            max-width: 100%;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 15px;
+            padding: 20px;
         }
 
-        /* Mobile Header */
-        .mobile-header {
+        /* Header */
+        .app-header {
             background: linear-gradient(135deg, var(--primary-color) 0%, #4285f4 100%);
             color: white;
-            padding: 15px;
+            padding: 20px 0;
             position: sticky;
             top: 0;
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .header-top {
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
         }
 
         .app-title {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .app-title h1 {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: 500;
         }
 
         .app-title i {
-            font-size: 24px;
+            font-size: 28px;
         }
 
         .header-actions {
             display: flex;
-            gap: 10px;
+            gap: 15px;
         }
 
         .btn-header {
             background: rgba(255, 255, 255, 0.2);
             border: none;
             color: white;
-            padding: 8px 15px;
+            padding: 10px 20px;
             border-radius: 20px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             transition: background 0.3s;
             font-weight: 500;
-            font-size: 14px;
         }
 
         .btn-header:hover {
             background: rgba(255, 255, 255, 0.3);
         }
 
-        /* Homework Details Card (Mobile Optimized) */
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        /* Homework Card */
         .homework-card {
             background: var(--surface-color);
             border-radius: 12px;
             box-shadow: var(--card-shadow);
             overflow: hidden;
-            margin-bottom: 15px;
-            border: 1px solid var(--divider-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .homework-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--card-shadow-hover);
         }
 
         .card-content {
-            padding: 20px;
+            padding: 24px;
         }
 
         .subject-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
 
         .subject-title {
-            font-size: 22px;
+            font-size: 28px;
             font-weight: 700;
             color: var(--text-primary);
-            flex: 1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
         }
 
         .status-chip {
             background: var(--secondary-color);
             color: white;
-            padding: 4px 12px;
+            padding: 6px 16px;
             border-radius: 16px;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 500;
-            white-space: nowrap;
         }
 
         .chapter-name {
-            font-size: 16px;
+            font-size: 20px;
             color: var(--text-secondary);
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             line-height: 1.4;
-            word-break: break-word;
         }
 
         .divider {
             height: 1px;
             background: var(--divider-color);
-            margin: 15px 0;
+            margin: 20px 0;
         }
 
         .details-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
         }
 
         .detail-item {
@@ -175,16 +180,15 @@
         }
 
         .detail-label {
-            font-size: 12px;
+            font-size: 14px;
             color: var(--text-secondary);
             font-weight: 500;
         }
 
         .detail-value {
-            font-size: 14px;
+            font-size: 16px;
             color: var(--text-primary);
             font-weight: 400;
-            word-break: break-word;
         }
 
         .delete-warning {
@@ -197,25 +201,23 @@
             font-weight: 500;
         }
 
-        /* Files Section with Horizontal Scroll */
+        /* Files Section */
         .files-section {
             background: var(--surface-color);
             border-radius: 12px;
             box-shadow: var(--card-shadow);
-            padding: 20px;
-            margin-bottom: 15px;
-            border: 1px solid var(--divider-color);
+            padding: 24px;
         }
 
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .section-title {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 600;
             color: var(--text-primary);
         }
@@ -223,62 +225,74 @@
         .section-count {
             background: var(--primary-light);
             color: var(--primary-color);
-            padding: 3px 10px;
+            padding: 4px 12px;
             border-radius: 12px;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 500;
         }
 
-        /* Horizontal Scroller with Touch Support */
+        /* Horizontal Scroller */
+        .scroller-container {
+            position: relative;
+            margin: 0 -24px;
+            padding: 0 24px;
+        }
+
         .files-scroller {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             overflow-x: auto;
-            overflow-y: hidden;
-            padding: 10px 5px;
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE/Edge */
-            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-            scroll-snap-type: x mandatory;
-            scroll-padding: 0 15px;
+            padding: 20px 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) var(--divider-color);
         }
 
         .files-scroller::-webkit-scrollbar {
-            display: none; /* Chrome/Safari */
+            height: 6px;
         }
 
-        /* File Cards for Mobile */
+        .files-scroller::-webkit-scrollbar-track {
+            background: var(--divider-color);
+            border-radius: 3px;
+        }
+
+        .files-scroller::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 3px;
+        }
+
+        /* File Cards - FIXED BUTTON SIZES */
         .file-card {
             flex: 0 0 auto;
-            width: 150px; /* Fixed width for mobile */
+            width: 240px; /* Increased width */
             background: var(--surface-color);
             border-radius: 12px;
             overflow: hidden;
             box-shadow: var(--card-shadow);
             transition: transform 0.3s, box-shadow 0.3s;
-            border: 1px solid var(--divider-color);
-            scroll-snap-align: start;
+            cursor: pointer;
         }
 
         .file-card:hover {
-            transform: translateY(-2px);
+            transform: translateY(-4px);
             box-shadow: var(--card-shadow-hover);
         }
 
         .file-card.image-card {
-            height: 200px;
+            width: 220px;
+            height: 320px;
         }
 
         .file-card.pdf-card {
-            height: 180px;
+            width: 260px;
+            height: 320px;
         }
 
         .image-preview {
             width: 100%;
-            height: 100px;
+            height: 160px; /* Increased height */
             overflow: hidden;
             background: var(--background-color);
-            position: relative;
         }
 
         .image-preview img {
@@ -288,47 +302,50 @@
             transition: transform 0.3s;
         }
 
+        .file-card:hover .image-preview img {
+            transform: scale(1.05);
+        }
+
         .file-info {
-            padding: 12px;
+            padding: 16px;
+            height: calc(100% - 160px); /* Adjusted for larger preview */
             display: flex;
             flex-direction: column;
-            height: calc(100% - 100px);
         }
 
         .file-name {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 500;
             color: var(--text-primary);
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            flex: 1;
+            flex-grow: 1;
         }
 
         .file-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .file-size {
-            font-size: 11px;
+            font-size: 12px;
             color: var(--text-secondary);
         }
 
         .file-count {
             background: var(--primary-color);
             color: white;
-            font-size: 11px;
-            padding: 2px 6px;
+            font-size: 12px;
+            padding: 2px 8px;
             border-radius: 10px;
             font-weight: 500;
         }
 
-        /* Buttons for Mobile */
         .file-actions {
             display: flex;
             gap: 8px;
@@ -336,33 +353,30 @@
         }
 
         .btn-action {
-            flex: 1;
-            padding: 8px 10px;
+            padding: 10px 16px; /* Increased padding */
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 500;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 4px;
+            gap: 6px;
             transition: all 0.3s;
-            min-height: 36px;
-        }
-
-        .btn-action i {
-            font-size: 14px;
+            min-width: 80px; /* Minimum width for buttons */
         }
 
         .btn-open {
             background: var(--primary-light);
             color: var(--primary-color);
+            flex: 1;
         }
 
         .btn-download {
             background: var(--primary-color);
             color: white;
+            flex: 1;
         }
 
         .btn-action:hover {
@@ -370,120 +384,143 @@
             transform: translateY(-1px);
         }
 
-        /* PDF Card (Different Style) */
-        .pdf-card .file-info {
-            height: 100%;
+        /* Countdown Timer */
+        .countdown-card {
+            background: var(--surface-color);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 24px;
             text-align: center;
         }
 
-        .pdf-card .file-actions {
-            margin-top: 10px;
+        .countdown-header {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
         }
 
-        /* PDF Viewer Modal (Mobile Optimized) */
+        .countdown-timer {
+            background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+            border: 2px solid var(--warning-color);
+            border-radius: 12px;
+            padding: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .countdown-timer i {
+            font-size: 24px;
+            color: var(--warning-color);
+        }
+
+        .countdown-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--warning-color);
+        }
+
+        .countdown-note {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* PDF Viewer Modal */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0, 0, 0, 0.8);
             display: none;
             align-items: center;
             justify-content: center;
             z-index: 2000;
-            padding: 10px;
-            overflow: hidden;
+            padding: 20px;
         }
 
         .modal-content {
             background: var(--surface-color);
             border-radius: 16px;
-            width: 100%;
-            max-width: 100%;
-            height: 90vh;
+            width: 90%;
+            max-width: 1000px;
             max-height: 90vh;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            position: relative;
         }
 
         .modal-header {
-            padding: 15px;
+            padding: 20px;
             background: var(--primary-color);
             color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-shrink: 0;
         }
 
         .modal-title {
-            font-size: 16px;
+            font-size: 20px;
             font-weight: 500;
-            flex: 1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
         }
 
         .modal-close {
             background: none;
             border: none;
             color: white;
-            font-size: 20px;
+            font-size: 24px;
             cursor: pointer;
             padding: 0;
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
             transition: background 0.3s;
-            flex-shrink: 0;
         }
 
         .modal-close:hover {
             background: rgba(255, 255, 255, 0.2);
         }
 
+        .modal-body {
+            flex: 1;
+            overflow: auto;
+            padding: 20px;
+        }
+
+        /* PDF Viewer Controls */
         .pdf-controls {
             background: var(--background-color);
-            padding: 12px 15px;
+            padding: 16px 20px;
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            justify-content: space-between;
+            align-items: center;
             border-bottom: 1px solid var(--divider-color);
-            flex-shrink: 0;
         }
 
         .page-controls {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
+            gap: 16px;
         }
 
         .btn-control {
             background: var(--surface-color);
             border: 1px solid var(--divider-color);
             color: var(--text-primary);
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: all 0.3s;
-            flex-shrink: 0;
-        }
-
-        .btn-control i {
-            font-size: 16px;
         }
 
         .btn-control:hover {
@@ -493,103 +530,51 @@
         }
 
         .page-info {
-            font-size: 14px;
+            font-size: 16px;
             color: var(--text-secondary);
-            margin: 0 5px;
-        }
-
-        .page-input-container {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .page-input {
-            width: 50px;
-            padding: 6px;
-            border: 1px solid var(--divider-color);
-            border-radius: 6px;
-            text-align: center;
-            font-size: 14px;
         }
 
         .viewer-actions {
             display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-
-        .pdf-viewer-container {
-            flex: 1;
-            overflow: auto;
-            position: relative;
-            background: var(--background-color);
+            gap: 12px;
         }
 
         .pdf-viewer {
             width: 100%;
-            min-height: 100%;
+            min-height: 600px;
+            background: var(--background-color);
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 15px;
+            overflow: auto;
         }
 
-        /* Image Viewer Modal */
-        .image-viewer-container {
-            flex: 1;
-            overflow: hidden;
-            position: relative;
-            background: #000;
-        }
-
-        #fullImageView {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            display: block;
-        }
-
-        .image-actions {
-            padding: 15px;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.8);
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-        }
-
-        /* Share Modal for Mobile */
+        /* Share Modal */
         .share-modal {
             background: var(--surface-color);
             border-radius: 16px;
-            width: 90%;
-            max-width: 400px;
-            padding: 20px;
-            max-height: 80vh;
-            overflow-y: auto;
+            width: 400px;
+            max-width: 90%;
+            padding: 24px;
         }
 
         .share-options {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin: 15px 0;
+            gap: 16px;
+            margin: 20px 0;
         }
 
         .share-option {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
-            padding: 15px;
+            gap: 12px;
+            padding: 20px;
             border: 2px solid var(--divider-color);
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s;
-            min-height: 90px;
-            justify-content: center;
         }
 
         .share-option:hover {
@@ -598,38 +583,36 @@
         }
 
         .share-icon {
-            font-size: 28px;
+            font-size: 32px;
             color: var(--primary-color);
         }
 
         .share-label {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 500;
             color: var(--text-primary);
-            text-align: center;
         }
 
         .qr-container {
             text-align: center;
-            padding: 15px;
-            margin: 15px 0;
+            padding: 20px;
+            margin: 20px 0;
             background: var(--background-color);
             border-radius: 12px;
         }
 
         #qrCodeCanvas {
-            max-width: 150px;
+            max-width: 200px;
             margin: 0 auto;
         }
 
         .link-input {
             width: 100%;
-            padding: 10px 14px;
+            padding: 12px 16px;
             border: 2px solid var(--divider-color);
             border-radius: 8px;
             font-size: 14px;
-            margin-bottom: 15px;
-            background: var(--background-color);
+            margin-bottom: 16px;
         }
 
         .link-input:focus {
@@ -637,42 +620,97 @@
             border-color: var(--primary-color);
         }
 
-        /* Toast Notifications */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            left: 20px;
-            background: var(--text-primary);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
+        /* Links Section - FIXED FOR EXTERNAL LINKS */
+        .links-section {
+            background: var(--surface-color);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 24px;
+            margin-top: 20px;
+        }
+
+        .link-item {
             display: flex;
             align-items: center;
             gap: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            z-index: 3000;
-            animation: slideIn 0.3s ease;
-            display: none;
-            max-width: 400px;
-            margin: 0 auto;
+            padding: 16px; /* Increased padding */
+            background: var(--background-color);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            transition: background 0.3s;
         }
 
-        @keyframes slideIn {
-            from { transform: translateY(100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        .link-item:hover {
+            background: var(--primary-light);
         }
 
-        .toast.success {
-            background: var(--secondary-color);
+        .link-icon {
+            font-size: 20px;
+            color: var(--primary-color);
         }
 
-        .toast.error {
-            background: var(--error-color);
+        .link-text {
+            flex: 1;
+            font-size: 14px;
+            color: var(--text-primary);
+            word-break: break-all;
+            padding: 4px 0;
         }
 
-        .toast.info {
+        .open-link-btn {
             background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+            min-width: 100px; /* Fixed width for button */
+        }
+
+        .open-link-btn:hover {
+            background: #0d62d9;
+            transform: translateY(-1px);
+        }
+
+        /* Empty States */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            color: var(--divider-color);
+            margin-bottom: 16px;
+        }
+
+        .empty-text {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .empty-subtext {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        /* Compression Badge */
+        .compression-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--primary-light);
+            color: var(--primary-color);
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-top: 8px;
         }
 
         /* Loading States */
@@ -681,9 +719,8 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 40px 20px;
+            padding: 40px;
             color: var(--text-secondary);
-            text-align: center;
         }
 
         .spinner {
@@ -700,233 +737,251 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Error States */
-        .error-state {
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--text-primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-            color: var(--error-color);
-            text-align: center;
+            gap: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 3000;
+            animation: slideIn 0.3s ease;
+            display: none;
         }
 
-        .error-state i {
-            font-size: 48px;
-            margin-bottom: 16px;
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
 
-        /* Action Buttons (Bottom Bar) */
-        .action-buttons {
+        .toast.success {
+            background: var(--secondary-color);
+        }
+
+        .toast.error {
+            background: var(--error-color);
+        }
+
+        .toast.info {
+            background: var(--primary-color);
+        }
+
+        /* Search Bar (like Android) */
+        .search-container {
+            background: var(--surface-color);
+            border-radius: 25px;
+            box-shadow: var(--card-shadow);
+            height: 60px;
             display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            position: sticky;
-            bottom: 0;
-            background: var(--background-color);
-            padding: 15px 0;
-            border-top: 1px solid var(--divider-color);
+            align-items: center;
+            padding: 0 22px;
+            margin: 20px 0;
+            border: 1px solid var(--divider-color);
         }
 
-        .action-buttons .btn-action {
-            font-size: 14px;
-            min-height: 44px;
+        .search-icon {
+            font-size: 24px;
+            color: var(--secondary-color);
+            margin-right: 14px;
         }
 
-        /* Mobile Responsive Adjustments */
-        @media (max-width: 480px) {
+        .search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 17px;
+            color: var(--text-primary);
+            background: transparent;
+        }
+
+        .search-input::placeholder {
+            color: var(--text-light);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
             .container {
                 padding: 10px;
             }
-            
-            .subject-title {
-                font-size: 20px;
+
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
             }
-            
-            .chapter-name {
-                font-size: 15px;
-            }
-            
-            .file-card {
-                width: 140px;
-            }
-            
-            .share-options {
+
+            .details-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .page-controls {
-                flex-wrap: wrap;
-            }
-            
-            .btn-control {
-                width: 32px;
-                height: 32px;
-            }
-            
-            .btn-control i {
-                font-size: 14px;
-            }
-        }
 
-        /* Tablet and Larger Screens */
-        @media (min-width: 768px) {
-            .container {
-                max-width: 1200px;
-                padding: 20px;
-            }
-            
-            .file-card {
-                width: 180px;
-            }
-            
-            .image-preview {
-                height: 120px;
-            }
-            
-            .files-scroller {
-                gap: 20px;
-            }
-        }
-
-        /* Desktop Screens */
-        @media (min-width: 1024px) {
             .file-card {
                 width: 200px;
             }
-            
-            .files-scroller {
-                padding: 15px 10px;
+
+            .file-card.image-card,
+            .file-card.pdf-card {
+                width: 200px;
+                height: 300px;
             }
-        }
 
-        /* Touch-friendly styles */
-        .touch-scroll-hint {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-light);
-            font-size: 24px;
-            animation: bounce 2s infinite;
-        }
+            .share-options {
+                grid-template-columns: 1fr;
+            }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(-50%) translateX(0); }
-            50% { transform: translateY(-50%) translateX(-5px); }
-        }
+            .pdf-controls {
+                flex-direction: column;
+                gap: 16px;
+            }
 
-        /* Scroll indicators */
-        .scroll-indicator {
-            position: relative;
-            width: 100%;
-            height: 4px;
-            background: var(--divider-color);
-            margin-top: 10px;
-            border-radius: 2px;
-            overflow: hidden;
-        }
+            .page-controls, .viewer-actions {
+                width: 100%;
+                justify-content: center;
+            }
 
-        .scroll-progress {
-            position: absolute;
-            height: 100%;
-            background: var(--primary-color);
-            border-radius: 2px;
-            transition: width 0.3s;
+            .btn-action {
+                padding: 8px 12px;
+                min-width: 70px;
+            }
+
+            .open-link-btn {
+                min-width: 80px;
+                padding: 6px 12px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Mobile Header -->
-    <header class="mobile-header">
-        <div class="header-top">
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-content">
             <div class="app-title">
                 <i class="fas fa-book-open"></i>
                 <h1 id="pageTitle">Homework Viewer</h1>
             </div>
             <div class="header-actions">
-                <button class="btn-header" id="shareBtn">
+                <button class="btn-header" id="shareAllBtn">
                     <i class="fas fa-share-alt"></i> Share
                 </button>
                 <button class="btn-header" id="refreshBtn">
-                    <i class="fas fa-sync-alt"></i>
+                    <i class="fas fa-sync-alt"></i> Refresh
                 </button>
             </div>
         </div>
-        <div class="homework-info">
-            <div id="chapterNameSmall">Loading...</div>
-        </div>
     </header>
+
+    <!-- Search Bar (Android style) -->
+    <div class="container">
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search homework...">
+            <button class="btn-action btn-open" id="clearSearch" style="display: none; padding: 8px 12px;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
 
     <!-- Main Content -->
     <div class="container">
-        <!-- Homework Details Card -->
-        <div class="homework-card">
-            <div class="card-content">
-                <div class="subject-row">
-                    <div class="subject-title" id="subjectTitle">Loading...</div>
-                    <div class="status-chip" id="statusChip">ACTIVE</div>
+        <div class="main-content">
+            <!-- Homework Details Card -->
+            <div class="homework-card">
+                <div class="card-content">
+                    <div class="subject-row">
+                        <div class="subject-title" id="subjectTitle">Loading...</div>
+                        <div class="status-chip" id="statusChip">ACTIVE</div>
+                    </div>
+                    <div class="chapter-name" id="chapterName">Loading chapter name...</div>
+                    
+                    <div class="divider"></div>
+                    
+                    <div class="details-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">Date</span>
+                            <span class="detail-value" id="dateValue">--</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Teacher</span>
+                            <span class="detail-value" id="teacherValue">--</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Auto Delete</span>
+                            <span class="detail-value delete-warning" id="deleteValue">--</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Total Files</span>
+                            <span class="detail-value" id="filesCount">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Compression Info -->
+                    <div id="compressionContainer" style="margin-top: 16px; display: none;">
+                        <span class="compression-badge" id="compressionBadge">COMP: MEDIUM</span>
+                    </div>
                 </div>
-                
-                <div class="divider"></div>
-                
-                <div class="details-grid">
-                    <div class="detail-item">
-                        <span class="detail-label">Date</span>
-                        <span class="detail-value" id="dateValue">--</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Teacher</span>
-                        <span class="detail-value" id="teacherValue">--</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Auto Delete</span>
-                        <span class="detail-value delete-warning" id="deleteValue">--</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Total Files</span>
-                        <span class="detail-value" id="filesCount">0</span>
+            </div>
+
+            <!-- Images Section -->
+            <div class="files-section" id="imagesSection" style="display: none;">
+                <div class="section-header">
+                    <div class="section-title">Images</div>
+                    <div class="section-count" id="imagesCount">0</div>
+                </div>
+                <div class="scroller-container">
+                    <div class="files-scroller" id="imagesScroller">
+                        <!-- Images will be loaded here -->
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Images Section with Horizontal Scroll -->
-        <div class="files-section" id="imagesSection" style="display: none;">
-            <div class="section-header">
-                <div class="section-title">Images</div>
-                <div class="section-count" id="imagesCount">0</div>
+            <!-- PDFs Section -->
+            <div class="files-section" id="pdfsSection" style="display: none;">
+                <div class="section-header">
+                    <div class="section-title">PDF Documents</div>
+                    <div class="section-count" id="pdfsCount">0</div>
+                </div>
+                <div class="scroller-container">
+                    <div class="files-scroller" id="pdfsScroller">
+                        <!-- PDFs will be loaded here -->
+                    </div>
+                </div>
             </div>
-            <div class="files-scroller" id="imagesScroller">
-                <!-- Images will be loaded here -->
-            </div>
-            <div class="scroll-indicator">
-                <div class="scroll-progress" id="imagesScrollProgress"></div>
-            </div>
-        </div>
 
-        <!-- PDFs Section with Horizontal Scroll -->
-        <div class="files-section" id="pdfsSection" style="display: none;">
-            <div class="section-header">
-                <div class="section-title">PDF Documents</div>
-                <div class="section-count" id="pdfsCount">0</div>
+            <!-- Links Section -->
+            <div class="links-section" id="linksSection" style="display: none;">
+                <div class="section-header">
+                    <div class="section-title">External Links</div>
+                    <div class="section-count" id="linksCount">0</div>
+                </div>
+                <div id="linksContainer">
+                    <!-- Links will be loaded here -->
+                </div>
             </div>
-            <div class="files-scroller" id="pdfsScroller">
-                <!-- PDFs will be loaded here -->
-            </div>
-            <div class="scroll-indicator">
-                <div class="scroll-progress" id="pdfsScrollProgress"></div>
-            </div>
-        </div>
 
-        <!-- Action Buttons (Bottom) -->
-        <div class="action-buttons">
-            <button class="btn-action btn-open" id="backBtn" style="flex: 1;">
-                <i class="fas fa-arrow-left"></i> Back
-            </button>
-            <button class="btn-action btn-download" id="openAllBtn" style="flex: 1;">
-                <i class="fas fa-external-link-alt"></i> Open All
-            </button>
+            <!-- Countdown Timer -->
+            <div class="countdown-card" id="countdownCard" style="display: none;">
+                <div class="countdown-header">Auto Delete Countdown</div>
+                <div class="countdown-timer">
+                    <i class="fas fa-clock"></i>
+                    <div class="countdown-text" id="countdownText">--</div>
+                </div>
+                <div class="countdown-note">This homework will be automatically deleted after the countdown ends</div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display: flex; gap: 16px; margin-top: 20px;">
+                <button class="btn-action btn-open" id="backBtn" style="flex: 1; padding: 12px;">
+                    <i class="fas fa-arrow-left"></i> Back to List
+                </button>
+                <button class="btn-action btn-download" id="shareBtn" style="flex: 1; padding: 12px;">
+                    <i class="fas fa-share"></i> Share Homework
+                </button>
+            </div>
         </div>
     </div>
 
@@ -948,23 +1003,21 @@
                     <button class="btn-control" id="nextPage">
                         <i class="fas fa-chevron-right"></i>
                     </button>
-                    <div class="page-input-container">
-                        <input type="number" id="pageInput" min="1" value="1" class="page-input">
-                        <button class="btn-control" id="goPage">
-                            Go
-                        </button>
-                    </div>
+                    <input type="number" id="pageInput" min="1" value="1" style="width: 60px; padding: 8px; border: 1px solid var(--divider-color); border-radius: 6px;">
+                    <button class="btn-control" id="goPage">
+                        Go
+                    </button>
                 </div>
                 <div class="viewer-actions">
-                    <button class="btn-action btn-download" id="downloadPdf" style="font-size: 12px; padding: 8px 12px;">
+                    <button class="btn-action btn-download" id="downloadPdf" style="padding: 10px 16px;">
                         <i class="fas fa-download"></i> Download
                     </button>
-                    <button class="btn-action btn-open" id="openPdfExternal" style="font-size: 12px; padding: 8px 12px;">
-                        <i class="fas fa-external-link-alt"></i> Open in Browser
+                    <button class="btn-action btn-open" id="printPdf" style="padding: 10px 16px;">
+                        <i class="fas fa-print"></i> Print
                     </button>
                 </div>
             </div>
-            <div class="pdf-viewer-container">
+            <div class="modal-body">
                 <div class="pdf-viewer" id="pdfViewer">
                     <div class="loading">
                         <div class="spinner"></div>
@@ -982,13 +1035,13 @@
                 <div class="modal-title" id="imageModalTitle">Image Viewer</div>
                 <button class="modal-close" id="closeImageModal">&times;</button>
             </div>
-            <div class="image-viewer-container">
-                <img id="fullImageView" src="" alt="">
-                <div class="image-actions">
-                    <button class="btn-action btn-download" id="downloadImage" style="margin: 0 auto;">
-                        <i class="fas fa-download"></i> Download Image
-                    </button>
-                </div>
+            <div class="modal-body" style="text-align: center; padding: 0;">
+                <img id="fullImageView" src="" alt="" style="max-width: 100%; max-height: 70vh; object-fit: contain;">
+            </div>
+            <div style="padding: 20px; text-align: center;">
+                <button class="btn-action btn-download" id="downloadImage" style="padding: 12px 24px;">
+                    <i class="fas fa-download"></i> Download Image
+                </button>
             </div>
         </div>
     </div>
@@ -996,11 +1049,11 @@
     <!-- Share Modal -->
     <div class="modal-overlay" id="shareModal">
         <div class="share-modal">
-            <div style="text-align: center; margin-bottom: 15px;">
-                <div style="font-size: 18px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px;">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div style="font-size: 20px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px;">
                     Share Homework
                 </div>
-                <div style="font-size: 13px; color: var(--text-secondary);">
+                <div style="font-size: 14px; color: var(--text-secondary);">
                     Share via different platforms
                 </div>
             </div>
@@ -1026,18 +1079,18 @@
 
             <div class="qr-container" id="qrContainer" style="display: none;">
                 <canvas id="qrCodeCanvas"></canvas>
-                <div style="margin-top: 10px; font-size: 12px; color: var(--text-secondary);">
+                <div style="margin-top: 12px; font-size: 14px; color: var(--text-secondary);">
                     Scan to open on mobile
                 </div>
             </div>
 
             <input type="text" class="link-input" id="shareLinkInput" readonly value="Loading...">
 
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button class="btn-action btn-open" id="closeShareModal" style="flex: 1;">
+            <div style="display: flex; gap: 12px; margin-top: 20px;">
+                <button class="btn-action btn-open" id="closeShareModal" style="flex: 1; padding: 12px;">
                     Cancel
                 </button>
-                <button class="btn-action btn-download" id="copyLinkBtn" style="flex: 1;">
+                <button class="btn-action btn-download" id="copyLinkBtn" style="flex: 1; padding: 12px;">
                     <i class="far fa-copy"></i> Copy Link
                 </button>
             </div>
@@ -1079,32 +1132,40 @@
         let pageNumPending = null;
         let allImages = [];
         let allPDFs = [];
-        let allImageUrls = [];
-        let allPdfUrls = [];
-
-        // Get homework ID from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const homeworkId = urlParams.get('id') || '-Ohw7jwqCUrCimAmYgbM';
+        let allLinks = [];
 
         // DOM Elements
+        const urlParams = new URLSearchParams(window.location.search);
+        const homeworkId = urlParams.get('id') || '-Ohw7jwqCUrCimAmYgbM';
+        
+        // Homework details
         const subjectTitle = document.getElementById('subjectTitle');
-        const chapterNameSmall = document.getElementById('chapterNameSmall');
         const statusChip = document.getElementById('statusChip');
+        const chapterName = document.getElementById('chapterName');
         const dateValue = document.getElementById('dateValue');
         const teacherValue = document.getElementById('teacherValue');
         const deleteValue = document.getElementById('deleteValue');
         const filesCount = document.getElementById('filesCount');
+        const compressionContainer = document.getElementById('compressionContainer');
+        const compressionBadge = document.getElementById('compressionBadge');
         const pageTitle = document.getElementById('pageTitle');
 
         // Sections
         const imagesSection = document.getElementById('imagesSection');
         const imagesScroller = document.getElementById('imagesScroller');
         const imagesCount = document.getElementById('imagesCount');
-        const imagesScrollProgress = document.getElementById('imagesScrollProgress');
         const pdfsSection = document.getElementById('pdfsSection');
         const pdfsScroller = document.getElementById('pdfsScroller');
         const pdfsCount = document.getElementById('pdfsCount');
-        const pdfsScrollProgress = document.getElementById('pdfsScrollProgress');
+        const linksSection = document.getElementById('linksSection');
+        const linksContainer = document.getElementById('linksContainer');
+        const linksCount = document.getElementById('linksCount');
+        const countdownCard = document.getElementById('countdownCard');
+        const countdownText = document.getElementById('countdownText');
+
+        // Search
+        const searchInput = document.getElementById('searchInput');
+        const clearSearch = document.getElementById('clearSearch');
 
         // Modals
         const pdfModal = document.getElementById('pdfModal');
@@ -1114,7 +1175,7 @@
         const closeImageModal = document.getElementById('closeImageModal');
         const closeShareModal = document.getElementById('closeShareModal');
 
-        // PDF Viewer
+        // PDF Viewer elements
         const pdfViewer = document.getElementById('pdfViewer');
         const prevPageBtn = document.getElementById('prevPage');
         const nextPageBtn = document.getElementById('nextPage');
@@ -1123,7 +1184,7 @@
         const pageInput = document.getElementById('pageInput');
         const goPageBtn = document.getElementById('goPage');
         const downloadPdfBtn = document.getElementById('downloadPdf');
-        const openPdfExternalBtn = document.getElementById('openPdfExternal');
+        const printPdfBtn = document.getElementById('printPdf');
         const pdfModalTitle = document.getElementById('pdfModalTitle');
 
         // Image Viewer
@@ -1144,8 +1205,8 @@
         // Buttons
         const backBtn = document.getElementById('backBtn');
         const shareBtn = document.getElementById('shareBtn');
+        const shareAllBtn = document.getElementById('shareAllBtn');
         const refreshBtn = document.getElementById('refreshBtn');
-        const openAllBtn = document.getElementById('openAllBtn');
 
         // Toast
         const toast = document.getElementById('toast');
@@ -1172,64 +1233,6 @@
             });
         }
 
-        // Fix PDF URL for Cloudinary
-        function fixPdfUrl(pdfUrl) {
-            if (!pdfUrl) return pdfUrl;
-            
-            // Cloudinary URLs need proper format for direct access
-            let url = pdfUrl.trim();
-            
-            // Remove duplicate .pdf extensions
-            if (url.endsWith('.pdf.pdf')) {
-                url = url.substring(0, url.length - 4);
-            }
-            
-            // Ensure it ends with .pdf
-            if (!url.endsWith('.pdf')) {
-                url += '.pdf';
-            }
-            
-            // For Cloudinary URLs, try to get the direct link
-            if (url.includes('res.cloudinary.com') && url.includes('/upload/')) {
-                // Try to get the raw file by removing transformations
-                const uploadIndex = url.indexOf('/upload/');
-                if (uploadIndex !== -1) {
-                    const afterUpload = url.substring(uploadIndex + 7);
-                    const parts = afterUpload.split('/');
-                    if (parts.length > 2) {
-                        // Reconstruct URL without transformations
-                        const version = parts[0];
-                        const folder = parts[1];
-                        const filename = parts[parts.length - 1];
-                        url = `https://res.cloudinary.com/dmhyflswb/raw/upload/${version}/${folder}/${filename}`;
-                    }
-                }
-            }
-            
-            return url;
-        }
-
-        // Fix image URL for better display
-        function fixImageUrl(imageUrl) {
-            if (!imageUrl) return imageUrl;
-            
-            let url = imageUrl.trim();
-            
-            // For Cloudinary images, add optimization parameters
-            if (url.includes('res.cloudinary.com') && url.includes('/upload/')) {
-                // Add optimization parameters for mobile
-                if (!url.includes('/w_')) {
-                    const uploadIndex = url.indexOf('/upload/');
-                    if (uploadIndex !== -1) {
-                        url = url.substring(0, uploadIndex + 7) + 'w_400,c_scale/' + 
-                              url.substring(uploadIndex + 7);
-                    }
-                }
-            }
-            
-            return url;
-        }
-
         // Load homework data
         function loadHomeworkData() {
             if (!homeworkId) {
@@ -1244,21 +1247,15 @@
                 if (data) {
                     homeworkData = data;
                     updateUI();
-                    showToast('Homework loaded successfully');
                 } else {
                     showToast('Homework not found', 'error');
-                    document.querySelector('.container').innerHTML = `
-                        <div class="error-state">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <div style="font-size: 18px; font-weight: 600; margin-bottom: 10px;">
-                                Homework not found
+                    document.querySelector('.main-content').innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
                             </div>
-                            <div style="color: var(--text-secondary); margin-bottom: 20px;">
-                                The requested homework ID does not exist
-                            </div>
-                            <button class="btn-action btn-open" onclick="window.history.back()">
-                                <i class="fas fa-arrow-left"></i> Go Back
-                            </button>
+                            <div class="empty-text">Homework not found</div>
+                            <div class="empty-subtext">The requested homework ID does not exist</div>
                         </div>
                     `;
                 }
@@ -1272,16 +1269,16 @@
         function updateUI() {
             if (!homeworkData) return;
 
-            // Set page title and header
+            // Set page title
             const title = homeworkData.chapterName || 'Homework';
             document.title = `${title} - Homework Viewer`;
             pageTitle.textContent = title;
-            chapterNameSmall.textContent = title;
 
             // Set basic info
             subjectTitle.textContent = homeworkData.chapterName || 'Homework';
+            chapterName.textContent = homeworkData.chapterName || 'No chapter name provided';
             dateValue.textContent = homeworkData.createdDate || '--';
-            teacherValue.textContent = 'Unknown Teacher';
+            teacherValue.textContent = 'Unknown Teacher'; // You might want to fetch teacher name
             
             // Set status
             const isActive = homeworkData.deletionTimestamp && 
@@ -1289,38 +1286,56 @@
             statusChip.textContent = isActive ? 'ACTIVE' : 'EXPIRED';
             statusChip.style.background = isActive ? 'var(--secondary-color)' : 'var(--error-color)';
 
+            // Set compression info
+            if (homeworkData.compressionLevel) {
+                compressionContainer.style.display = 'block';
+                compressionBadge.textContent = `COMP: ${homeworkData.compressionLevel.toUpperCase()}`;
+            } else {
+                compressionContainer.style.display = 'none';
+            }
+
             // Set auto delete info
             if (homeworkData.deletionTimestamp) {
                 const daysLeft = Math.ceil((homeworkData.deletionTimestamp - Date.now()) / (1000 * 60 * 60 * 24));
                 if (daysLeft > 0) {
                     deleteValue.textContent = `${daysLeft} days left`;
                     deleteValue.className = 'detail-value delete-warning';
+                    
+                    // Show and start countdown
+                    countdownCard.style.display = 'block';
+                    startCountdown(homeworkData.deletionTimestamp);
                 } else {
                     deleteValue.textContent = 'Expired - Will be deleted soon';
                     deleteValue.className = 'detail-value delete-expired';
+                    countdownCard.style.display = 'none';
                 }
             } else {
                 deleteValue.textContent = 'No auto-delete scheduled';
                 deleteValue.className = 'detail-value';
+                countdownCard.style.display = 'none';
             }
 
             // Process files
             let imageUrls = [];
             let pdfUrls = [];
+            let links = [];
             let totalFiles = 0;
 
             // Check for imageUrls array
             if (homeworkData.imageUrls && Array.isArray(homeworkData.imageUrls)) {
-                imageUrls = homeworkData.imageUrls
-                    .filter(url => url && typeof url === 'string')
-                    .map(url => fixImageUrl(url));
+                imageUrls = homeworkData.imageUrls.filter(url => url && typeof url === 'string');
             }
 
             // Check for pdfUrls array
             if (homeworkData.pdfUrls && Array.isArray(homeworkData.pdfUrls)) {
-                pdfUrls = homeworkData.pdfUrls
-                    .filter(url => url && typeof url === 'string')
-                    .map(url => fixPdfUrl(url));
+                pdfUrls = homeworkData.pdfUrls.filter(url => url && typeof url === 'string');
+            }
+
+            // Check for links
+            if (homeworkData.links && typeof homeworkData.links === 'string') {
+                links = [homeworkData.links];
+            } else if (homeworkData.links && Array.isArray(homeworkData.links)) {
+                links = homeworkData.links.filter(link => link && typeof link === 'string');
             }
 
             // For backward compatibility, check fileUrls
@@ -1328,28 +1343,25 @@
                 homeworkData.fileUrls.forEach(url => {
                     if (!url || typeof url !== 'string') return;
                     
-                    const lowerUrl = url.toLowerCase();
-                    if (lowerUrl.match(/\.(jpg|jpeg|png|gif|webp|bmp)$/)) {
-                        imageUrls.push(fixImageUrl(url));
-                    } else if (lowerUrl.includes('.pdf')) {
-                        pdfUrls.push(fixPdfUrl(url));
+                    if (url.toLowerCase().match(/\.(jpg|jpeg|png|gif|webp|bmp)$/)) {
+                        imageUrls.push(url);
+                    } else if (url.toLowerCase().includes('.pdf')) {
+                        pdfUrls.push(url);
+                    } else if (url.toLowerCase().startsWith('http')) {
+                        links.push(url);
                     }
                 });
             }
 
-            // Remove duplicates
-            imageUrls = [...new Set(imageUrls)];
-            pdfUrls = [...new Set(pdfUrls)];
-
             // Store for search functionality
             allImages = imageUrls;
             allPDFs = pdfUrls;
-            allImageUrls = imageUrls;
-            allPdfUrls = pdfUrls;
+            allLinks = links;
 
             // Update counts
             imagesCount.textContent = imageUrls.length;
             pdfsCount.textContent = pdfUrls.length;
+            linksCount.textContent = links.length;
             totalFiles = imageUrls.length + pdfUrls.length;
             filesCount.textContent = totalFiles;
 
@@ -1357,7 +1369,6 @@
             if (imageUrls.length > 0) {
                 imagesSection.style.display = 'block';
                 renderImages(imageUrls);
-                setupHorizontalScroll('imagesScroller', 'imagesScrollProgress');
             } else {
                 imagesSection.style.display = 'none';
             }
@@ -1365,9 +1376,15 @@
             if (pdfUrls.length > 0) {
                 pdfsSection.style.display = 'block';
                 renderPDFs(pdfUrls);
-                setupHorizontalScroll('pdfsScroller', 'pdfsScrollProgress');
             } else {
                 pdfsSection.style.display = 'none';
+            }
+
+            if (links.length > 0) {
+                linksSection.style.display = 'block';
+                renderLinks(links);
+            } else {
+                linksSection.style.display = 'none';
             }
 
             // Update share link
@@ -1375,65 +1392,31 @@
             shareLinkInput.value = shareLink;
         }
 
-        // Setup horizontal scroll with progress indicator
-        function setupHorizontalScroll(scrollerId, progressId) {
-            const scroller = document.getElementById(scrollerId);
-            const progress = document.getElementById(progressId);
-            
-            if (!scroller || !progress) return;
-            
-            scroller.addEventListener('scroll', () => {
-                const scrollLeft = scroller.scrollLeft;
-                const scrollWidth = scroller.scrollWidth - scroller.clientWidth;
-                const progressPercent = (scrollLeft / scrollWidth) * 100;
-                progress.style.width = `${progressPercent}%`;
-            });
-            
-            // Initialize progress
-            progress.style.width = '0%';
-        }
-
         // Render images in horizontal scroller
         function renderImages(imageUrls) {
             imagesScroller.innerHTML = '';
             
-            if (imageUrls.length === 0) {
-                imagesScroller.innerHTML = `
-                    <div style="width: 100%; text-align: center; padding: 40px 20px; color: var(--text-secondary);">
-                        <i class="fas fa-images" style="font-size: 40px; margin-bottom: 10px; opacity: 0.5;"></i>
-                        <div>No images available</div>
-                    </div>
-                `;
-                return;
-            }
-            
             imageUrls.forEach((url, index) => {
                 const fileName = getFileNameFromUrl(url);
+                const fileSize = getFileSizeFromUrl(url);
                 
                 const card = document.createElement('div');
                 card.className = 'file-card image-card';
                 card.innerHTML = `
                     <div class="image-preview">
-                        <img src="${url}" alt="${fileName}" loading="lazy" 
-                             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23f0f0f0%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22 font-size=%2212%22 fill=%22%23999%22>Image</text></svg>'">
+                        <img src="${url}" alt="${fileName}" loading="lazy" onerror="this.src='https://via.placeholder.com/200x160?text=Image+Error'">
                     </div>
                     <div class="file-info">
-                        <div class="file-name" title="${fileName}">${fileName}</div>
+                        <div class="file-name">${fileName}</div>
                         <div class="file-meta">
-                            <span class="file-size">Image ${index + 1}</span>
-                            <span class="file-count">${index + 1}</span>
+                            <span class="file-size">${fileSize}</span>
+                            <span class="file-count">${index + 1}/${allImages.length}</span>
                         </div>
                         <div class="file-actions">
-                            <button class="btn-action btn-open view-image" 
-                                    data-url="${url}" 
-                                    data-name="${fileName}"
-                                    title="View Image">
+                            <button class="btn-action btn-open view-image" data-url="${url}" data-name="${fileName}">
                                 <i class="fas fa-eye"></i> View
                             </button>
-                            <button class="btn-action btn-download download-image" 
-                                    data-url="${url}" 
-                                    data-name="${fileName}"
-                                    title="Download Image">
+                            <button class="btn-action btn-download download-image" data-url="${url}" data-name="${fileName}">
                                 <i class="fas fa-download"></i> Save
                             </button>
                         </div>
@@ -1444,65 +1427,48 @@
             });
 
             // Add event listeners
-            setTimeout(() => {
-                document.querySelectorAll('.view-image').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const url = e.target.closest('button').dataset.url;
-                        const name = e.target.closest('button').dataset.name;
-                        openImageViewer(url, name);
-                    });
+            document.querySelectorAll('.view-image').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const url = e.target.closest('button').dataset.url;
+                    const name = e.target.closest('button').dataset.name;
+                    openImageViewer(url, name);
                 });
+            });
 
-                document.querySelectorAll('.download-image').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const url = e.target.closest('button').dataset.url;
-                        const name = e.target.closest('button').dataset.name;
-                        downloadFile(url, name);
-                    });
+            document.querySelectorAll('.download-image').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const url = e.target.closest('button').dataset.url;
+                    const name = e.target.closest('button').dataset.name;
+                    downloadFile(url, name);
                 });
-            }, 100);
+            });
         }
 
         // Render PDFs in horizontal scroller
         function renderPDFs(pdfUrls) {
             pdfsScroller.innerHTML = '';
             
-            if (pdfUrls.length === 0) {
-                pdfsScroller.innerHTML = `
-                    <div style="width: 100%; text-align: center; padding: 40px 20px; color: var(--text-secondary);">
-                        <i class="fas fa-file-pdf" style="font-size: 40px; margin-bottom: 10px; color: var(--error-color); opacity: 0.5;"></i>
-                        <div>No PDFs available</div>
-                    </div>
-                `;
-                return;
-            }
-            
             pdfUrls.forEach((url, index) => {
                 const fileName = getFileNameFromUrl(url);
+                const fileSize = getFileSizeFromUrl(url);
                 
                 const card = document.createElement('div');
                 card.className = 'file-card pdf-card';
                 card.innerHTML = `
                     <div class="file-info">
-                        <div style="text-align: center; margin-bottom: 10px;">
-                            <i class="fas fa-file-pdf" style="font-size: 40px; color: var(--error-color);"></i>
+                        <div style="text-align: center; margin-bottom: 16px;">
+                            <i class="fas fa-file-pdf" style="font-size: 48px; color: var(--error-color);"></i>
                         </div>
-                        <div class="file-name" title="${fileName}">${fileName}</div>
+                        <div class="file-name">${fileName}</div>
                         <div class="file-meta">
-                            <span class="file-size">PDF ${index + 1}</span>
-                            <span class="file-count">PDF</span>
+                            <span class="file-size">${fileSize}</span>
+                            <span class="file-count">${index + 1}/${allPDFs.length}</span>
                         </div>
                         <div class="file-actions">
-                            <button class="btn-action btn-open view-pdf" 
-                                    data-url="${url}" 
-                                    data-name="${fileName}"
-                                    title="Open PDF">
-                                <i class="fas fa-eye"></i> View
+                            <button class="btn-action btn-open view-pdf" data-url="${url}" data-name="${fileName}">
+                                <i class="fas fa-eye"></i> Open
                             </button>
-                            <button class="btn-action btn-download download-pdf" 
-                                    data-url="${url}" 
-                                    data-name="${fileName}"
-                                    title="Download PDF">
+                            <button class="btn-action btn-download download-pdf" data-url="${url}" data-name="${fileName}">
                                 <i class="fas fa-download"></i> Save
                             </button>
                         </div>
@@ -1513,23 +1479,80 @@
             });
 
             // Add event listeners
-            setTimeout(() => {
-                document.querySelectorAll('.view-pdf').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const url = e.target.closest('button').dataset.url;
-                        const name = e.target.closest('button').dataset.name;
-                        openPDFViewer(url, name);
-                    });
+            document.querySelectorAll('.view-pdf').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const url = e.target.closest('button').dataset.url;
+                    const name = e.target.closest('button').dataset.name;
+                    openPDFViewer(url, name);
                 });
+            });
 
-                document.querySelectorAll('.download-pdf').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const url = e.target.closest('button').dataset.url;
-                        const name = e.target.closest('button').dataset.name;
-                        downloadFile(url, name);
-                    });
+            document.querySelectorAll('.download-pdf').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const url = e.target.closest('button').dataset.url;
+                    const name = e.target.closest('button').dataset.name;
+                    downloadFile(url, name);
                 });
-            }, 100);
+            });
+        }
+
+        // Render links - FIXED VERSION
+        function renderLinks(links) {
+            linksContainer.innerHTML = '';
+            
+            links.forEach((link, index) => {
+                // Clean the link
+                let displayLink = link.trim();
+                if (!displayLink.startsWith('http')) {
+                    displayLink = 'https://' + displayLink;
+                }
+                
+                // Extract domain for display
+                let domain = '';
+                try {
+                    const url = new URL(displayLink);
+                    domain = url.hostname;
+                } catch {
+                    domain = 'External Link';
+                }
+                
+                const linkItem = document.createElement('div');
+                linkItem.className = 'link-item';
+                linkItem.innerHTML = `
+                    <i class="fas fa-link link-icon"></i>
+                    <div class="link-text">
+                        <div style="font-weight: 500; margin-bottom: 4px;">${domain}</div>
+                        <div style="font-size: 12px; color: var(--text-secondary); word-break: break-all;">${displayLink}</div>
+                    </div>
+                    <button class="open-link-btn" data-url="${displayLink}">
+                        <i class="fas fa-external-link-alt"></i> Open
+                    </button>
+                `;
+                
+                linksContainer.appendChild(linkItem);
+            });
+
+            // Add event listeners for open buttons
+            document.querySelectorAll('.open-link-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const url = e.target.closest('button').dataset.url;
+                    window.open(url, '_blank', 'noopener,noreferrer');
+                });
+            });
+
+            // Make entire link item clickable too
+            document.querySelectorAll('.link-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    if (!e.target.closest('.open-link-btn')) {
+                        const btn = item.querySelector('.open-link-btn');
+                        if (btn) {
+                            const url = btn.dataset.url;
+                            window.open(url, '_blank', 'noopener,noreferrer');
+                        }
+                    }
+                });
+            });
         }
 
         // Get file name from URL
@@ -1537,46 +1560,32 @@
             try {
                 const urlObj = new URL(url);
                 const path = urlObj.pathname;
-                let fileName = path.split('/').pop() || 'file';
-                
-                // Clean up filename
-                if (fileName.includes('?')) {
-                    fileName = fileName.split('?')[0];
-                }
-                
-                // Remove extension for display
-                if (fileName.includes('.')) {
-                    fileName = fileName.substring(0, fileName.lastIndexOf('.'));
-                }
-                
-                // Clean up special characters
-                fileName = fileName.replace(/[_-]/g, ' ');
-                
-                // Capitalize first letter of each word
-                fileName = fileName.split(' ')
-                    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-                    .join(' ');
-                
-                // Truncate if too long
-                if (fileName.length > 30) {
-                    fileName = fileName.substring(0, 27) + '...';
-                }
-                
-                return fileName || 'File';
+                const fileName = path.split('/').pop();
+                return fileName || 'file';
             } catch {
                 const segments = url.split('/');
-                let fileName = segments.pop() || 'file';
-                
-                // Clean up
-                if (fileName.includes('?')) fileName = fileName.split('?')[0];
-                if (fileName.includes('.')) fileName = fileName.substring(0, fileName.lastIndexOf('.'));
-                
-                return fileName.replace(/[_-]/g, ' ') || 'File';
+                const fileName = segments.pop() || 'file';
+                // Clean up the filename
+                return fileName.split('?')[0].substring(0, 30) + (fileName.length > 30 ? '...' : '');
             }
         }
 
+        // Get file size from URL (placeholder)
+        function getFileSizeFromUrl(url) {
+            // In a real app, you would fetch the file size from headers
+            // For now, return a placeholder
+            if (url.toLowerCase().includes('.pdf')) {
+                return 'PDF Document';
+            } else if (url.toLowerCase().match(/\.(jpg|jpeg|png|gif)$/)) {
+                return 'Image File';
+            } else if (url.toLowerCase().match(/\.(webp|bmp)$/)) {
+                return 'Image';
+            }
+            return 'File';
+        }
+
         // Open PDF viewer
-        async function openPDFViewer(url, name) {
+        function openPDFViewer(url, name) {
             currentPdfUrl = url;
             pdfModalTitle.textContent = name;
             pdfModal.style.display = 'flex';
@@ -1590,18 +1599,25 @@
             `;
             
             // Load PDF
-            await loadPDF(url);
+            loadPDF(url);
         }
 
-        // Load PDF using PDF.js with error handling
+        // Load PDF using PDF.js - FIXED VERSION
         async function loadPDF(url) {
             try {
+                // Check if URL is accessible
+                const testResponse = await fetch(url, { method: 'HEAD' });
+                if (!testResponse.ok) {
+                    throw new Error(`PDF not accessible: ${testResponse.status}`);
+                }
+
                 // Configure PDF.js
                 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
                 
                 const loadingTask = pdfjsLib.getDocument({
                     url: url,
-                    withCredentials: false
+                    cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/cmaps/',
+                    cMapPacked: true
                 });
                 
                 pdfDoc = await loadingTask.promise;
@@ -1609,53 +1625,44 @@
                 totalPages = pdfDoc.numPages;
                 totalPagesSpan.textContent = totalPages;
                 pageInput.max = totalPages;
-                pageInput.value = 1;
                 
-                await renderPage(1);
-                showToast('PDF loaded successfully');
+                renderPage(1);
             } catch (error) {
                 console.error('Error loading PDF:', error);
                 pdfViewer.innerHTML = `
-                    <div class="error-state">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <div style="font-size: 16px; font-weight: 600; margin-bottom: 10px;">
-                            Error loading PDF
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
                         </div>
-                        <div style="color: var(--text-secondary); margin-bottom: 15px; font-size: 14px;">
-                            ${error.message || 'Unable to load PDF file'}
-                        </div>
-                        <button class="btn-action btn-download" onclick="window.open('${currentPdfUrl}', '_blank')">
-                            <i class="fas fa-external-link-alt"></i> Open in Browser
+                        <div class="empty-text">Error loading PDF</div>
+                        <div class="empty-subtext">${error.message}</div>
+                        <button class="btn-action btn-download" onclick="window.open('${url}', '_blank')" style="margin-top: 16px;">
+                            <i class="fas fa-external-link-alt"></i> Open in New Tab
                         </button>
                     </div>
                 `;
-                showToast('Error loading PDF. Try opening in browser.', 'error');
+                showToast('Error loading PDF. Try opening in new tab.', 'error');
             }
         }
 
         // Render PDF page
         async function renderPage(pageNumber) {
-            if (!pdfDoc || pageRendering) return;
+            if (!pdfDoc) return;
             
             pageRendering = true;
             
             try {
                 const page = await pdfDoc.getPage(pageNumber);
-                
-                // Calculate scale for mobile
-                const viewport = page.getViewport({ scale: 1.0 });
-                const containerWidth = pdfViewer.clientWidth - 30;
-                const scale = containerWidth / viewport.width;
-                const scaledViewport = page.getViewport({ scale: scale });
+                const viewport = page.getViewport({ scale: 1.5 });
                 
                 const canvas = document.createElement('canvas');
                 const context = canvas.getContext('2d');
-                canvas.height = scaledViewport.height;
-                canvas.width = scaledViewport.width;
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
                 
                 const renderContext = {
                     canvasContext: context,
-                    viewport: scaledViewport
+                    viewport: viewport
                 };
                 
                 await page.render(renderContext).promise;
@@ -1677,13 +1684,7 @@
                 }
             } catch (error) {
                 console.error('Error rendering page:', error);
-                pdfViewer.innerHTML = `
-                    <div class="error-state">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <div>Error rendering page</div>
-                    </div>
-                `;
-                pageRendering = false;
+                showToast('Error rendering PDF page', 'error');
             }
         }
 
@@ -1705,27 +1706,45 @@
 
         // Download file
         function downloadFile(url, fileName) {
-            try {
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = fileName;
-                link.target = '_blank';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                showToast('Download started');
-            } catch (error) {
-                console.error('Download error:', error);
-                window.open(url, '_blank');
-                showToast('Opening file in new tab');
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = fileName || getFileNameFromUrl(url);
+            link.target = '_blank';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast('Download started');
+        }
+
+        // Start countdown timer
+        function startCountdown(deletionTimestamp) {
+            function updateCountdown() {
+                const now = Date.now();
+                const timeLeft = deletionTimestamp - now;
+                
+                if (timeLeft <= 0) {
+                    countdownText.textContent = 'EXPIRED';
+                    return;
+                }
+                
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                
+                countdownText.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+                
+                requestAnimationFrame(updateCountdown);
             }
+            
+            updateCountdown();
         }
 
         // Generate QR code
         function generateQRCode(text) {
             qrContainer.style.display = 'block';
             QRCode.toCanvas(qrCodeCanvas, text, {
-                width: 150,
+                width: 200,
                 margin: 2,
                 color: {
                     dark: '#1a73e8',
@@ -1734,13 +1753,107 @@
             });
         }
 
+        // Search functionality
+        function setupSearch() {
+            searchInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase().trim();
+                
+                if (query) {
+                    clearSearch.style.display = 'block';
+                    
+                    // Filter images
+                    const filteredImages = allImages.filter(url => {
+                        const fileName = getFileNameFromUrl(url).toLowerCase();
+                        return fileName.includes(query);
+                    });
+                    
+                    // Filter PDFs
+                    const filteredPDFs = allPDFs.filter(url => {
+                        const fileName = getFileNameFromUrl(url).toLowerCase();
+                        return fileName.includes(query);
+                    });
+                    
+                    // Filter links
+                    const filteredLinks = allLinks.filter(link => {
+                        return link.toLowerCase().includes(query);
+                    });
+                    
+                    // Update displays
+                    if (filteredImages.length > 0) {
+                        imagesSection.style.display = 'block';
+                        renderImages(filteredImages);
+                        imagesCount.textContent = `${filteredImages.length} (filtered)`;
+                    } else {
+                        imagesSection.style.display = 'none';
+                    }
+                    
+                    if (filteredPDFs.length > 0) {
+                        pdfsSection.style.display = 'block';
+                        renderPDFs(filteredPDFs);
+                        pdfsCount.textContent = `${filteredPDFs.length} (filtered)`;
+                    } else {
+                        pdfsSection.style.display = 'none';
+                    }
+                    
+                    if (filteredLinks.length > 0) {
+                        linksSection.style.display = 'block';
+                        renderLinks(filteredLinks);
+                        linksCount.textContent = `${filteredLinks.length} (filtered)`;
+                    } else {
+                        linksSection.style.display = 'none';
+                    }
+                } else {
+                    clearSearch.style.display = 'none';
+                    
+                    // Reset to show all files
+                    if (allImages.length > 0) {
+                        imagesSection.style.display = 'block';
+                        renderImages(allImages);
+                        imagesCount.textContent = allImages.length;
+                    }
+                    
+                    if (allPDFs.length > 0) {
+                        pdfsSection.style.display = 'block';
+                        renderPDFs(allPDFs);
+                        pdfsCount.textContent = allPDFs.length;
+                    }
+                    
+                    if (allLinks.length > 0) {
+                        linksSection.style.display = 'block';
+                        renderLinks(allLinks);
+                        linksCount.textContent = allLinks.length;
+                    }
+                }
+            });
+            
+            clearSearch.addEventListener('click', function() {
+                searchInput.value = '';
+                clearSearch.style.display = 'none';
+                
+                // Reset to show all files
+                if (allImages.length > 0) {
+                    imagesSection.style.display = 'block';
+                    renderImages(allImages);
+                    imagesCount.textContent = allImages.length;
+                }
+                
+                if (allPDFs.length > 0) {
+                    pdfsSection.style.display = 'block';
+                    renderPDFs(allPDFs);
+                    pdfsCount.textContent = allPDFs.length;
+                }
+                
+                if (allLinks.length > 0) {
+                    linksSection.style.display = 'block';
+                    renderLinks(allLinks);
+                    linksCount.textContent = allLinks.length;
+                }
+            });
+        }
+
         // Event Listeners
         closePdfModal.addEventListener('click', () => {
             pdfModal.style.display = 'none';
-            if (pdfDoc) {
-                pdfDoc.destroy();
-                pdfDoc = null;
-            }
         });
 
         closeImageModal.addEventListener('click', () => {
@@ -1779,12 +1892,12 @@
 
         downloadPdfBtn.addEventListener('click', () => {
             if (currentPdfUrl) {
-                const fileName = getFileNameFromUrl(currentPdfUrl) + '.pdf';
+                const fileName = getFileNameFromUrl(currentPdfUrl);
                 downloadFile(currentPdfUrl, fileName);
             }
         });
 
-        openPdfExternalBtn.addEventListener('click', () => {
+        printPdfBtn.addEventListener('click', () => {
             if (currentPdfUrl) {
                 window.open(currentPdfUrl, '_blank');
             }
@@ -1792,7 +1905,7 @@
 
         downloadImageBtn.addEventListener('click', () => {
             const url = fullImageView.src;
-            const fileName = getFileNameFromUrl(url) + '.jpg';
+            const fileName = getFileNameFromUrl(url);
             downloadFile(url, fileName);
         });
 
@@ -1800,9 +1913,8 @@
             shareModal.style.display = 'flex';
         });
 
-        refreshBtn.addEventListener('click', () => {
-            loadHomeworkData();
-            showToast('Refreshing...', 'info');
+        shareAllBtn.addEventListener('click', () => {
+            shareModal.style.display = 'flex';
         });
 
         copyLinkBtn.addEventListener('click', () => {
@@ -1831,24 +1943,20 @@
         });
 
         backBtn.addEventListener('click', () => {
-            if (document.referrer && document.referrer.includes(window.location.hostname)) {
+            // Go back to list or home
+            if (document.referrer) {
                 window.history.back();
             } else {
-                window.location.href = 'https://swayamvarapp26-oss.github.io/-Homework-Viewer/';
+                window.location.href = 'index.html'; // Your main page
             }
         });
 
-        openAllBtn.addEventListener('click', () => {
-            // Open all PDFs in new tabs
-            allPdfUrls.forEach((url, index) => {
-                setTimeout(() => {
-                    window.open(url, '_blank');
-                }, index * 500); // Stagger openings
-            });
-            showToast(`Opening ${allPdfUrls.length} PDFs`, 'info');
+        refreshBtn.addEventListener('click', () => {
+            loadHomeworkData();
+            showToast('Refreshing...', 'info');
         });
 
-        // Close modals on overlay click
+        // Close modals on overlay click - FIXED
         [pdfModal, imageModal, shareModal].forEach(modal => {
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
@@ -1856,36 +1964,25 @@
                     if (modal === shareModal) {
                         qrContainer.style.display = 'none';
                     }
-                    if (modal === pdfModal && pdfDoc) {
-                        pdfDoc.destroy();
-                        pdfDoc = null;
-                    }
                 }
             });
         });
 
-        // Close modal on escape key
+        // Close modals on Escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                if (pdfModal.style.display === 'flex') {
-                    pdfModal.style.display = 'none';
-                    if (pdfDoc) {
-                        pdfDoc.destroy();
-                        pdfDoc = null;
-                    }
-                }
-                if (imageModal.style.display === 'flex') {
-                    imageModal.style.display = 'none';
-                }
-                if (shareModal.style.display === 'flex') {
-                    shareModal.style.display = 'none';
-                    qrContainer.style.display = 'none';
-                }
+                pdfModal.style.display = 'none';
+                imageModal.style.display = 'none';
+                shareModal.style.display = 'none';
+                qrContainer.style.display = 'none';
             }
         });
 
         // Initialize
-        loadHomeworkData();
+        window.addEventListener('DOMContentLoaded', () => {
+            loadHomeworkData();
+            setupSearch();
+        });
     </script>
 </body>
 </html>
