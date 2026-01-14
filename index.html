@@ -17,6 +17,7 @@
             background-color: #f5f7fa;
             color: #333;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         .container {
@@ -32,6 +33,7 @@
             padding: 25px 30px;
             border-radius: 12px;
             margin-bottom: 30px;
+            box-shadow: 0 6px 20px rgba(26, 115, 232, 0.2);
         }
 
         .header-content {
@@ -170,6 +172,7 @@
             border-radius: 12px;
             overflow: hidden;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
 
         .file-card:hover {
@@ -186,6 +189,8 @@
             align-items: center;
             justify-content: center;
             border-bottom: 2px solid #eaeaea;
+            position: relative;
+            overflow: hidden;
         }
 
         .pdf-preview {
@@ -199,6 +204,18 @@
 
         .pdf-preview i {
             color: #ea4335;
+        }
+
+        .file-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #1a73e8;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
         }
 
         .file-info {
@@ -251,6 +268,151 @@
         .btn:hover {
             opacity: 0.9;
             transform: translateY(-2px);
+        }
+
+        /* PDF Viewer Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 95%;
+            height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            padding: 20px;
+            background: #1a73e8;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: background 0.3s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-controls {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #eaeaea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .viewer-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .pdf-viewer-container {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pdf-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+        }
+
+        /* Google Docs Viewer Fallback */
+        .docs-viewer-container {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #34a853;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            color: #5f6368;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #eaeaea;
+            border-top-color: #1a73e8;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         /* Share Section */
@@ -322,52 +484,6 @@
             transform: translateY(-2px);
         }
 
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #34a853;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 8px;
-            display: none;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            z-index: 1000;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        /* Loading */
-        .loading {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 60px 20px;
-            color: #5f6368;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #eaeaea;
-            border-top-color: #1a73e8;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
         /* Responsive */
         @media (max-width: 768px) {
             .container {
@@ -389,6 +505,12 @@
             .share-btn {
                 justify-content: center;
             }
+            
+            .modal-content {
+                width: 100%;
+                height: 100vh;
+                border-radius: 0;
+            }
         }
     </style>
 </head>
@@ -403,7 +525,7 @@
                         Homework Viewer
                         <span class="public-badge">Public Access</span>
                     </h1>
-                    <p style="opacity: 0.9; margin-top: 5px;">No login required • Direct download access</p>
+                    <p style="opacity: 0.9; margin-top: 5px;">View PDFs directly in browser • No downloads required</p>
                 </div>
                 <button class="btn btn-open" id="refreshBtn" style="background: rgba(255, 255, 255, 0.2); color: white;">
                     <i class="fas fa-sync-alt"></i> Refresh
@@ -487,20 +609,63 @@
                 </button>
             </div>
         </div>
+    </div>
 
-        <!-- PDF Download Instructions -->
-        <div class="files-section" style="background: #e8f0fe; border: 2px dashed #1a73e8;">
-            <div class="section-header">
-                <div class="section-title"><i class="fas fa-info-circle"></i> How to View PDFs</div>
+    <!-- PDF Viewer Modal -->
+    <div class="modal-overlay" id="pdfModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="pdfModalTitle">
+                    <i class="fas fa-file-pdf"></i>
+                    <span>PDF Viewer</span>
+                </div>
+                <button class="modal-close" id="closePdfModal">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-            <div style="color: #1a73e8; line-height: 1.8;">
-                <p><strong>Note:</strong> PDF preview may not work directly in browser due to Firebase Storage restrictions.</p>
-                <p>To view PDFs:</p>
-                <ol style="margin-left: 20px; margin-top: 10px;">
-                    <li>Click the <strong>"Save"</strong> button on any PDF card</li>
-                    <li>Open the downloaded PDF file on your device</li>
-                    <li>Or use the <strong>"Open in New Tab"</strong> option if available</li>
-                </ol>
+            
+            <div class="modal-controls">
+                <div class="viewer-actions">
+                    <button class="btn btn-download" id="downloadPdfBtn">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                    <button class="btn btn-open" id="openInNewTabBtn">
+                        <i class="fas fa-external-link-alt"></i> Open in New Tab
+                    </button>
+                </div>
+            </div>
+            
+            <div class="pdf-viewer-container" id="pdfViewerContainer">
+                <div class="loading" id="pdfLoading">
+                    <div class="spinner"></div>
+                    <div>Loading PDF Viewer...</div>
+                </div>
+                <!-- Google Docs Viewer will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Viewer Modal -->
+    <div class="modal-overlay" id="imageModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="imageModalTitle">
+                    <i class="fas fa-image"></i>
+                    <span>Image Viewer</span>
+                </div>
+                <button class="modal-close" id="closeImageModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-controls">
+                <button class="btn btn-download" id="downloadImageBtn">
+                    <i class="fas fa-download"></i> Download Image
+                </button>
+            </div>
+            
+            <div style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px;">
+                <img id="fullImageView" src="" alt="" style="max-width: 100%; max-height: 100%; object-fit: contain;">
             </div>
         </div>
     </div>
@@ -543,16 +708,38 @@
         const pdfsGrid = document.getElementById('pdfsGrid');
         const pdfsCount = document.getElementById('pdfsCount');
         const shareLink = document.getElementById('shareLink');
+        
+        // Modals
+        const pdfModal = document.getElementById('pdfModal');
+        const imageModal = document.getElementById('imageModal');
+        const closePdfModal = document.getElementById('closePdfModal');
+        const closeImageModal = document.getElementById('closeImageModal');
+        const pdfViewerContainer = document.getElementById('pdfViewerContainer');
+        const pdfLoading = document.getElementById('pdfLoading');
+        const pdfModalTitle = document.getElementById('pdfModalTitle');
+        const fullImageView = document.getElementById('fullImageView');
+        const imageModalTitle = document.getElementById('imageModalTitle');
+        
+        // Buttons
+        const refreshBtn = document.getElementById('refreshBtn');
         const copyLinkBtn = document.getElementById('copyLinkBtn');
         const shareWhatsapp = document.getElementById('shareWhatsapp');
         const shareTelegram = document.getElementById('shareTelegram');
         const shareEmail = document.getElementById('shareEmail');
-        const refreshBtn = document.getElementById('refreshBtn');
+        const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+        const openInNewTabBtn = document.getElementById('openInNewTabBtn');
+        const downloadImageBtn = document.getElementById('downloadImageBtn');
+        
+        // Toast
         const toast = document.getElementById('toast');
         const toastMessage = document.getElementById('toastMessage');
 
         // Global variables
         let homeworkData = null;
+        let currentPdfUrl = null;
+        let currentPdfName = null;
+        let currentImageUrl = null;
+        let currentImageName = null;
 
         // Show toast notification
         function showToast(message, type = 'success') {
@@ -586,7 +773,7 @@
                 // Decode URL encoding
                 fileName = decodeURIComponent(fileName);
                 
-                // Clean up special characters but keep extension
+                // Clean up but keep extension
                 const extension = fileName.split('.').pop();
                 const nameWithoutExt = fileName.substring(0, fileName.length - extension.length - 1);
                 const cleanName = nameWithoutExt.replace(/[^a-zA-Z0-9\s_-]/g, ' ').trim();
@@ -597,22 +784,15 @@
             }
         }
 
-        // Convert Firebase Storage URL to download URL
-        function convertToDownloadUrl(url) {
+        // Convert Firebase Storage URL to public URL for Google Docs Viewer
+        function convertToPublicUrl(url) {
             try {
-                // If it's already a Firebase Storage download URL
-                if (url.includes('firebasestorage.googleapis.com') && url.includes('alt=media')) {
-                    return url;
-                }
-                
-                // If it's a Firebase Storage URL without download params
+                // If it's already a Firebase Storage URL
                 if (url.includes('firebasestorage.googleapis.com')) {
-                    // Add download parameters
-                    if (url.includes('?')) {
-                        return url + '&alt=media';
-                    } else {
-                        return url + '?alt=media';
-                    }
+                    // Remove any existing query parameters
+                    const baseUrl = url.split('?')[0];
+                    // Add alt=media parameter
+                    return baseUrl + '?alt=media';
                 }
                 
                 // If it's a gs:// URL
@@ -635,7 +815,114 @@
             }
         }
 
-        // Direct file download function
+        // Open PDF in modal using Google Docs Viewer
+        function openPdfInModal(url, fileName) {
+            currentPdfUrl = url;
+            currentPdfName = fileName;
+            
+            // Update modal title
+            pdfModalTitle.querySelector('span').textContent = fileName;
+            
+            // Show modal
+            pdfModal.style.display = 'flex';
+            
+            // Show loading
+            pdfViewerContainer.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <div>Loading PDF Viewer...</div>
+                </div>
+            `;
+            
+            // Set download button
+            downloadPdfBtn.onclick = () => downloadFile(url, fileName);
+            
+            // Set open in new tab button
+            openInNewTabBtn.onclick = () => {
+                window.open(url, '_blank');
+                showToast('Opening PDF in new tab...', 'info');
+            };
+            
+            // Load Google Docs Viewer after a short delay
+            setTimeout(() => {
+                loadGoogleDocsViewer(url);
+            }, 500);
+        }
+
+        // Load Google Docs Viewer for PDF
+        function loadGoogleDocsViewer(pdfUrl) {
+            try {
+                // Create Google Docs Viewer URL
+                const viewerUrl = `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(pdfUrl)}`;
+                
+                // Create iframe
+                const iframe = document.createElement('iframe');
+                iframe.className = 'docs-viewer-container';
+                iframe.src = viewerUrl;
+                iframe.title = 'Google Docs Viewer';
+                iframe.allow = 'fullscreen';
+                
+                // Replace loading with iframe
+                pdfViewerContainer.innerHTML = '';
+                pdfViewerContainer.appendChild(iframe);
+                
+                // Add fallback message
+                setTimeout(() => {
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    if (iframeDoc.body && iframeDoc.body.innerHTML.includes('抱歉')) {
+                        showFallbackViewer(pdfUrl);
+                    }
+                }, 3000);
+                
+            } catch (error) {
+                console.error('Error loading Google Docs Viewer:', error);
+                showFallbackViewer(pdfUrl);
+            }
+        }
+
+        // Show fallback viewer
+        function showFallbackViewer(pdfUrl) {
+            pdfViewerContainer.innerHTML = `
+                <div style="padding: 40px; text-align: center;">
+                    <div style="font-size: 48px; color: #ea4335; margin-bottom: 20px;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3 style="margin-bottom: 15px; color: #202124;">Google Docs Viewer Not Available</h3>
+                    <p style="color: #5f6368; margin-bottom: 25px; line-height: 1.6;">
+                        The PDF cannot be displayed inline due to browser restrictions.<br>
+                        You can still access the PDF using the options below:
+                    </p>
+                    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                        <button class="btn btn-download" onclick="downloadFile('${pdfUrl}', '${currentPdfName}')">
+                            <i class="fas fa-download"></i> Download PDF
+                        </button>
+                        <button class="btn btn-open" onclick="window.open('${pdfUrl}', '_blank')">
+                            <i class="fas fa-external-link-alt"></i> Open in New Tab
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Open image in modal
+        function openImageInModal(url, fileName) {
+            currentImageUrl = url;
+            currentImageName = fileName;
+            
+            // Update modal title
+            imageModalTitle.querySelector('span').textContent = fileName;
+            
+            // Set image source
+            fullImageView.src = url;
+            
+            // Set download button
+            downloadImageBtn.onclick = () => downloadFile(url, fileName);
+            
+            // Show modal
+            imageModal.style.display = 'flex';
+        }
+
+        // Download file
         function downloadFile(url, fileName) {
             try {
                 showToast('Starting download...', 'info');
@@ -647,17 +934,12 @@
                 link.target = '_blank';
                 link.rel = 'noopener noreferrer';
                 
-                // For mobile devices, open in new tab
-                if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-                    window.open(url, '_blank');
-                    showToast('Opening in new tab...');
-                } else {
-                    // For desktop, trigger download
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    showToast('Download started!');
-                }
+                // Trigger download
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                showToast('Download started!');
                 
                 // Log the download
                 logDownload(fileName);
@@ -682,17 +964,16 @@
                     platform: navigator.platform
                 };
                 
-                // Log to Firebase (optional)
+                // Log to Firebase
                 fetch(`${firebaseConfig.databaseURL}/pdf_access_logs/${homeworkId}/downloads/${timestamp}.json`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(logData)
-                }).catch(error => console.log('Logging failed (optional):', error));
+                }).catch(error => console.log('Logging failed:', error));
                 
             } catch (error) {
-                // Silent fail for logging
                 console.log('Logging error:', error);
             }
         }
@@ -807,21 +1088,22 @@
             
             imageUrls.forEach((url, index) => {
                 const fileName = getFileNameFromUrl(url);
-                const downloadUrl = convertToDownloadUrl(url);
+                const downloadUrl = convertToPublicUrl(url);
                 
                 const card = document.createElement('div');
                 card.className = 'file-card';
                 card.innerHTML = `
                     <div class="file-preview">
+                        <span class="file-badge">IMAGE</span>
                         <img src="${downloadUrl}" alt="${fileName}" loading="lazy" 
                              style="width: 100%; height: 100%; object-fit: contain;"
-                             onerror="this.onerror=null; this.src='https://via.placeholder.com/300x200?text=Image+Not+Available';">
+                             onerror="this.onerror=null; this.style.display='none'; this.parentElement.innerHTML='<i class=\\'fas fa-image\\'></i>';">
                     </div>
                     <div class="file-info">
                         <div class="file-name" title="${fileName}">${fileName}</div>
                         <div class="file-actions">
                             <button class="btn btn-open view-image" data-url="${downloadUrl}" data-name="${fileName}">
-                                <i class="fas fa-external-link-alt"></i> Open
+                                <i class="fas fa-eye"></i> View
                             </button>
                             <button class="btn btn-download download-image" data-url="${downloadUrl}" data-name="${fileName}">
                                 <i class="fas fa-download"></i> Save
@@ -838,8 +1120,7 @@
                 btn.addEventListener('click', (e) => {
                     const url = e.target.closest('button').dataset.url;
                     const name = e.target.closest('button').dataset.name;
-                    window.open(url, '_blank');
-                    showToast('Opening image in new tab...', 'info');
+                    openImageInModal(url, name);
                 });
             });
 
@@ -858,19 +1139,20 @@
             
             pdfUrls.forEach((url, index) => {
                 const fileName = getFileNameFromUrl(url);
-                const downloadUrl = convertToDownloadUrl(url);
+                const downloadUrl = convertToPublicUrl(url);
                 
                 const card = document.createElement('div');
                 card.className = 'file-card';
                 card.innerHTML = `
                     <div class="file-preview pdf-preview">
+                        <span class="file-badge">PDF</span>
                         <i class="fas fa-file-pdf"></i>
                     </div>
                     <div class="file-info">
                         <div class="file-name" title="${fileName}">${fileName}</div>
                         <div class="file-actions">
                             <button class="btn btn-open view-pdf" data-url="${downloadUrl}" data-name="${fileName}">
-                                <i class="fas fa-external-link-alt"></i> Open
+                                <i class="fas fa-eye"></i> View in Browser
                             </button>
                             <button class="btn btn-download download-pdf" data-url="${downloadUrl}" data-name="${fileName}">
                                 <i class="fas fa-download"></i> Save
@@ -887,8 +1169,7 @@
                 btn.addEventListener('click', (e) => {
                     const url = e.target.closest('button').dataset.url;
                     const name = e.target.closest('button').dataset.name;
-                    window.open(url, '_blank');
-                    showToast('Opening PDF in new tab...', 'info');
+                    openPdfInModal(url, name);
                 });
             });
 
@@ -935,13 +1216,44 @@
             }
         });
 
+        // Close modals
+        closePdfModal.addEventListener('click', () => {
+            pdfModal.style.display = 'none';
+        });
+
+        closeImageModal.addEventListener('click', () => {
+            imageModal.style.display = 'none';
+        });
+
+        // Close modals on overlay click
+        pdfModal.addEventListener('click', (e) => {
+            if (e.target === pdfModal) {
+                pdfModal.style.display = 'none';
+            }
+        });
+
+        imageModal.addEventListener('click', (e) => {
+            if (e.target === imageModal) {
+                imageModal.style.display = 'none';
+            }
+        });
+
+        // Close modals on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                pdfModal.style.display = 'none';
+                imageModal.style.display = 'none';
+            }
+        });
+
         // Initialize
         window.addEventListener('DOMContentLoaded', () => {
             loadHomeworkData();
         });
 
-        // Make downloadFile available globally for error fallbacks
+        // Make functions available globally
         window.downloadFile = downloadFile;
+        window.openPdfInModal = openPdfInModal;
     </script>
 </body>
-    </html>
+</html>
