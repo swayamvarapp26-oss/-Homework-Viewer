@@ -195,6 +195,11 @@
             font-weight: 500;
         }
 
+        .delete-expired {
+            color: var(--error-color) !important;
+            font-weight: 500;
+        }
+
         /* Files Section */
         .files-section {
             background: var(--surface-color);
@@ -630,39 +635,53 @@
             color: var(--text-light);
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
+        /* Links Section */
+        .links-section {
+            background: var(--surface-color);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 24px;
+            margin-top: 20px;
+        }
 
-            .header-content {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
+        .link-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--background-color);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
 
-            .details-grid {
-                grid-template-columns: 1fr;
-            }
+        .link-item:hover {
+            background: var(--primary-light);
+        }
 
-            .file-card {
-                width: 160px;
-            }
+        .link-icon {
+            font-size: 20px;
+            color: var(--primary-color);
+        }
 
-            .share-options {
-                grid-template-columns: 1fr;
-            }
+        .link-text {
+            flex: 1;
+            font-size: 14px;
+            color: var(--text-primary);
+            word-break: break-all;
+        }
 
-            .pdf-controls {
-                flex-direction: column;
-                gap: 16px;
-            }
-
-            .page-controls, .viewer-actions {
-                width: 100%;
-                justify-content: center;
-            }
+        /* Compression Badge */
+        .compression-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--primary-light);
+            color: var(--primary-color);
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-top: 8px;
         }
 
         /* Loading States */
@@ -723,6 +742,73 @@
         .toast.info {
             background: var(--primary-color);
         }
+
+        /* Search Bar (like Android) */
+        .search-container {
+            background: var(--surface-color);
+            border-radius: 25px;
+            box-shadow: var(--card-shadow);
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 22px;
+            margin: 20px 0;
+            border: 1px solid var(--divider-color);
+        }
+
+        .search-icon {
+            font-size: 24px;
+            color: var(--secondary-color);
+            margin-right: 14px;
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 17px;
+            color: var(--text-primary);
+            background: transparent;
+        }
+
+        .search-input::placeholder {
+            color: var(--text-light);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .file-card {
+                width: 160px;
+            }
+
+            .share-options {
+                grid-template-columns: 1fr;
+            }
+
+            .pdf-controls {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .page-controls, .viewer-actions {
+                width: 100%;
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -731,11 +817,11 @@
         <div class="header-content">
             <div class="app-title">
                 <i class="fas fa-book-open"></i>
-                <h1>Homework Viewer</h1>
+                <h1 id="pageTitle">Homework Viewer</h1>
             </div>
             <div class="header-actions">
                 <button class="btn-header" id="shareAllBtn">
-                    <i class="fas fa-share-alt"></i> Share All
+                    <i class="fas fa-share-alt"></i> Share
                 </button>
                 <button class="btn-header" id="refreshBtn">
                     <i class="fas fa-sync-alt"></i> Refresh
@@ -743,6 +829,17 @@
             </div>
         </div>
     </header>
+
+    <!-- Search Bar (Android style) -->
+    <div class="container">
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search homework...">
+            <button class="btn-action btn-open" id="clearSearch" style="display: none;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
 
     <!-- Main Content -->
     <div class="container">
@@ -776,6 +873,11 @@
                             <span class="detail-value" id="filesCount">0</span>
                         </div>
                     </div>
+
+                    <!-- Compression Info -->
+                    <div id="compressionContainer" style="margin-top: 16px; display: none;">
+                        <span class="compression-badge" id="compressionBadge">COMP: MEDIUM</span>
+                    </div>
                 </div>
             </div>
 
@@ -802,6 +904,16 @@
                     <div class="files-scroller" id="pdfsScroller">
                         <!-- PDFs will be loaded here -->
                     </div>
+                </div>
+            </div>
+
+            <!-- Links Section -->
+            <div class="links-section" id="linksSection" style="display: none;">
+                <div class="section-header">
+                    <div class="section-title">External Links</div>
+                </div>
+                <div id="linksContainer">
+                    <!-- Links will be loaded here -->
                 </div>
             </div>
 
@@ -972,9 +1084,12 @@
         let totalPages = 1;
         let pageRendering = false;
         let pageNumPending = null;
+        let allImages = [];
+        let allPDFs = [];
 
         // DOM Elements
-        const homeworkId = getHomeworkIdFromUrl();
+        const urlParams = new URLSearchParams(window.location.search);
+        const homeworkId = urlParams.get('id') || '-Ohw7jwqCUrCimAmYgbM';
         
         // Homework details
         const subjectTitle = document.getElementById('subjectTitle');
@@ -984,6 +1099,9 @@
         const teacherValue = document.getElementById('teacherValue');
         const deleteValue = document.getElementById('deleteValue');
         const filesCount = document.getElementById('filesCount');
+        const compressionContainer = document.getElementById('compressionContainer');
+        const compressionBadge = document.getElementById('compressionBadge');
+        const pageTitle = document.getElementById('pageTitle');
 
         // Sections
         const imagesSection = document.getElementById('imagesSection');
@@ -992,8 +1110,14 @@
         const pdfsSection = document.getElementById('pdfsSection');
         const pdfsScroller = document.getElementById('pdfsScroller');
         const pdfsCount = document.getElementById('pdfsCount');
+        const linksSection = document.getElementById('linksSection');
+        const linksContainer = document.getElementById('linksContainer');
         const countdownCard = document.getElementById('countdownCard');
         const countdownText = document.getElementById('countdownText');
+
+        // Search
+        const searchInput = document.getElementById('searchInput');
+        const clearSearch = document.getElementById('clearSearch');
 
         // Modals
         const pdfModal = document.getElementById('pdfModal');
@@ -1040,12 +1164,6 @@
         const toast = document.getElementById('toast');
         const toastMessage = document.getElementById('toastMessage');
 
-        // Get homework ID from URL
-        function getHomeworkIdFromUrl() {
-            const params = new URLSearchParams(window.location.search);
-            return params.get('id') || '-Ohw7jwqCUrCimAmYgbM'; // Default to first homework
-        }
-
         // Show toast notification
         function showToast(message, type = 'success') {
             toastMessage.textContent = message;
@@ -1083,6 +1201,15 @@
                     updateUI();
                 } else {
                     showToast('Homework not found', 'error');
+                    document.querySelector('.main-content').innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="empty-text">Homework not found</div>
+                            <div class="empty-subtext">The requested homework ID does not exist</div>
+                        </div>
+                    `;
                 }
             }, (error) => {
                 console.error('Error loading homework:', error);
@@ -1093,6 +1220,11 @@
         // Update UI with homework data
         function updateUI() {
             if (!homeworkData) return;
+
+            // Set page title
+            const title = homeworkData.chapterName || 'Homework';
+            document.title = `${title} - Homework Viewer`;
+            pageTitle.textContent = title;
 
             // Set basic info
             subjectTitle.textContent = homeworkData.chapterName || 'Homework';
@@ -1106,30 +1238,39 @@
             statusChip.textContent = isActive ? 'ACTIVE' : 'EXPIRED';
             statusChip.style.background = isActive ? 'var(--secondary-color)' : 'var(--error-color)';
 
+            // Set compression info
+            if (homeworkData.compressionLevel) {
+                compressionContainer.style.display = 'block';
+                compressionBadge.textContent = `COMP: ${homeworkData.compressionLevel.toUpperCase()}`;
+            } else {
+                compressionContainer.style.display = 'none';
+            }
+
             // Set auto delete info
             if (homeworkData.deletionTimestamp) {
                 const daysLeft = Math.ceil((homeworkData.deletionTimestamp - Date.now()) / (1000 * 60 * 60 * 24));
                 if (daysLeft > 0) {
                     deleteValue.textContent = `${daysLeft} days left`;
-                    deleteValue.style.color = 'var(--warning-color)';
+                    deleteValue.className = 'detail-value delete-warning';
                     
                     // Show and start countdown
                     countdownCard.style.display = 'block';
                     startCountdown(homeworkData.deletionTimestamp);
                 } else {
                     deleteValue.textContent = 'Expired - Will be deleted soon';
-                    deleteValue.style.color = 'var(--error-color)';
+                    deleteValue.className = 'detail-value delete-expired';
                     countdownCard.style.display = 'none';
                 }
             } else {
                 deleteValue.textContent = 'No auto-delete scheduled';
-                deleteValue.style.color = 'var(--text-secondary)';
+                deleteValue.className = 'detail-value';
                 countdownCard.style.display = 'none';
             }
 
             // Process files
             let imageUrls = [];
             let pdfUrls = [];
+            let links = [];
             let totalFiles = 0;
 
             // Check for imageUrls array
@@ -1143,6 +1284,11 @@
                     .map(url => url.endsWith('.pdf') ? url : url + '.pdf');
             }
 
+            // Check for links
+            if (homeworkData.links && typeof homeworkData.links === 'string') {
+                links = [homeworkData.links];
+            }
+
             // For backward compatibility, check fileUrls
             if (homeworkData.fileUrls && Array.isArray(homeworkData.fileUrls)) {
                 homeworkData.fileUrls.forEach(url => {
@@ -1152,9 +1298,15 @@
                         imageUrls.push(url);
                     } else if (url.toLowerCase().includes('.pdf')) {
                         pdfUrls.push(url.endsWith('.pdf') ? url : url + '.pdf');
+                    } else if (url.toLowerCase().startsWith('http')) {
+                        links.push(url);
                     }
                 });
             }
+
+            // Store for search functionality
+            allImages = imageUrls;
+            allPDFs = pdfUrls;
 
             // Update counts
             imagesCount.textContent = imageUrls.length;
@@ -1175,6 +1327,13 @@
                 renderPDFs(pdfUrls);
             } else {
                 pdfsSection.style.display = 'none';
+            }
+
+            if (links.length > 0) {
+                linksSection.style.display = 'block';
+                renderLinks(links);
+            } else {
+                linksSection.style.display = 'none';
             }
 
             // Update share link
@@ -1282,6 +1441,33 @@
                     const url = e.target.closest('button').dataset.url;
                     const name = e.target.closest('button').dataset.name;
                     downloadFile(url, name);
+                });
+            });
+        }
+
+        // Render links
+        function renderLinks(links) {
+            linksContainer.innerHTML = '';
+            
+            links.forEach((link, index) => {
+                const linkItem = document.createElement('div');
+                linkItem.className = 'link-item';
+                linkItem.innerHTML = `
+                    <i class="fas fa-link link-icon"></i>
+                    <div class="link-text">${link}</div>
+                    <button class="btn-action btn-open open-link" data-url="${link}" style="padding: 6px 12px;">
+                        <i class="fas fa-external-link-alt"></i>
+                    </button>
+                `;
+                
+                linksContainer.appendChild(linkItem);
+            });
+
+            // Add event listeners
+            document.querySelectorAll('.open-link').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const url = e.target.closest('button').dataset.url;
+                    window.open(url, '_blank');
                 });
             });
         }
@@ -1461,6 +1647,79 @@
             });
         }
 
+        // Search functionality
+        function setupSearch() {
+            searchInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase().trim();
+                
+                if (query) {
+                    clearSearch.style.display = 'block';
+                    
+                    // Filter images
+                    const filteredImages = allImages.filter(url => {
+                        const fileName = getFileNameFromUrl(url).toLowerCase();
+                        return fileName.includes(query);
+                    });
+                    
+                    // Filter PDFs
+                    const filteredPDFs = allPDFs.filter(url => {
+                        const fileName = getFileNameFromUrl(url).toLowerCase();
+                        return fileName.includes(query);
+                    });
+                    
+                    // Update displays
+                    if (filteredImages.length > 0) {
+                        imagesSection.style.display = 'block';
+                        renderImages(filteredImages);
+                        imagesCount.textContent = `${filteredImages.length} (filtered)`;
+                    } else {
+                        imagesSection.style.display = 'none';
+                    }
+                    
+                    if (filteredPDFs.length > 0) {
+                        pdfsSection.style.display = 'block';
+                        renderPDFs(filteredPDFs);
+                        pdfsCount.textContent = `${filteredPDFs.length} (filtered)`;
+                    } else {
+                        pdfsSection.style.display = 'none';
+                    }
+                } else {
+                    clearSearch.style.display = 'none';
+                    
+                    // Reset to show all files
+                    if (allImages.length > 0) {
+                        imagesSection.style.display = 'block';
+                        renderImages(allImages);
+                        imagesCount.textContent = allImages.length;
+                    }
+                    
+                    if (allPDFs.length > 0) {
+                        pdfsSection.style.display = 'block';
+                        renderPDFs(allPDFs);
+                        pdfsCount.textContent = allPDFs.length;
+                    }
+                }
+            });
+            
+            clearSearch.addEventListener('click', function() {
+                searchInput.value = '';
+                clearSearch.style.display = 'none';
+                
+                // Reset to show all files
+                if (allImages.length > 0) {
+                    imagesSection.style.display = 'block';
+                    renderImages(allImages);
+                    imagesCount.textContent = allImages.length;
+                }
+                
+                if (allPDFs.length > 0) {
+                    pdfsSection.style.display = 'block';
+                    renderPDFs(allPDFs);
+                    pdfsCount.textContent = allPDFs.length;
+                }
+            });
+        }
+
         // Event Listeners
         closePdfModal.addEventListener('click', () => {
             pdfModal.style.display = 'none';
@@ -1551,12 +1810,17 @@
         });
 
         backBtn.addEventListener('click', () => {
-            window.history.back();
+            // Go back to list or home
+            if (document.referrer) {
+                window.history.back();
+            } else {
+                window.location.href = 'index.html'; // Your main page
+            }
         });
 
         refreshBtn.addEventListener('click', () => {
             loadHomeworkData();
-            showToast('Refreshing...');
+            showToast('Refreshing...', 'info');
         });
 
         // Close modals on overlay click
@@ -1573,6 +1837,7 @@
 
         // Initialize
         loadHomeworkData();
+        setupSearch();
     </script>
 </body>
 </html>
